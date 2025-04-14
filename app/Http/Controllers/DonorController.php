@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Donor;
 use App\Http\Requests\StoreDonorRequest;
 use App\Http\Requests\UpdateDonorRequest;
-
+use App\Models\Rdv;
+use Illuminate\Http\Request;
 class DonorController extends Controller
 {
     /**
@@ -14,6 +15,7 @@ class DonorController extends Controller
     public function index()
     {
         //
+        return view('donor.dashboard');
     }
 
     /**
@@ -62,5 +64,10 @@ class DonorController extends Controller
     public function destroy(Donor $donor)
     {
         //
+        $donor->delete();
+        return redirect()->route('donor.dashboard')->with('success', 'Donneur supprimé avec succès');
     }
+
+   
+
 }

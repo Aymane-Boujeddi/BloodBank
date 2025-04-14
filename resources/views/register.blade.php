@@ -176,6 +176,56 @@
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
+
+                            <!-- Blood Type (for donors) - add after date of birth -->
+                            <div>
+                                <label for="blood_type_id" class="block text-sm font-medium text-gray-700 mb-2">Groupe
+                                    sanguin</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fas fa-tint text-gray-400"></i>
+                                    </div>
+                                    <select id="blood_type_id" name="blood_type_id"
+                                        class="w-full pl-10 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent appearance-none @error('blood_type_id') border-red-500 @enderror">
+                                        <option value="">Sélectionnez votre groupe sanguin</option>
+                                        @foreach ($bloodTypes ?? [] as $bloodType)
+                                            <option value="{{ $bloodType->id }}"
+                                                {{ old('blood_type_id') == $bloodType->id ? 'selected' : '' }}>
+                                                {{ $bloodType->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div
+                                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                </div>
+                                @error('blood_type_id')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Add this inside the donor-fields div, after the blood type selection -->
+                            <div>
+                                <label for="has_donated" class="block text-sm font-medium text-gray-700 mb-2">Avez-vous déjà donné du sang?</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fas fa-history text-gray-400"></i>
+                                    </div>
+                                    <select id="has_donated" name="has_donated" 
+                                        class="w-full pl-10 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent appearance-none @error('has_donated') border-red-500 @enderror">
+                                        <option value="" disabled {{ old('has_donated') === null ? 'selected' : '' }}>Sélectionnez une option</option>
+                                        <option value="1" {{ old('has_donated') === '1' ? 'selected' : '' }}>Oui, j'ai déjà fait un don de sang</option>
+                                        <option value="0" {{ old('has_donated') === '0' ? 'selected' : '' }}>Non, ce sera ma première fois</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                </div>
+                                @error('has_donated')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
                         </div>
 
                         <div id="center-fields" class="space-y-6 @if (old('role', 'donor') == 'donor') hidden @endif">

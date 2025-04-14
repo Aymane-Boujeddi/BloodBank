@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('donation_centers', function (Blueprint $table) {
+        //
+        Schema::create('blood_types', function (Blueprint $table) {
             $table->id();
-            $table->string('center_name');
-            $table->string('address');
-            $table->string('phone_number');
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->timestamps();
+            $table->string('name')->unique();
         });
     }
 
@@ -26,6 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('donation_centers');
+        //
+        Schema::dropIfExists('blood_types');
     }
 };

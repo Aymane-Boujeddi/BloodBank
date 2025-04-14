@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('donation_centers', function (Blueprint $table) {
+        Schema::create('donations', function (Blueprint $table) {
             $table->id();
-            $table->string('center_name');
-            $table->string('address');
-            $table->string('phone_number');
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->timestamps();
+            $table->foreignId('donor_id')->constrained()->onDelete('cascade');
+            $table->foreignId('donation_center_id')->constrained()->onDelete('cascade');
+            $table->dateTime('donation_date');
+            $table->integer('amount'); 
+            
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('donation_centers');
+        Schema::dropIfExists('donations');
     }
 };

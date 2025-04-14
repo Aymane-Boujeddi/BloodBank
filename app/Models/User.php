@@ -50,4 +50,34 @@ class User extends Authenticatable
     {
         return $this->belongsTo(City::class);
     }
+
+    public function donor()
+    {
+        return $this->hasOne(Donor::class);
+    }
+
+    public function donationCenter()
+    {
+        return $this->hasOne(DonationCenter::class);
+    }
+
+    public function admin()
+    {
+        return $this->hasOne(Admin::class);
+    }
+
+    public function isDonor()
+    {
+        return $this->role === 'donor';
+    }
+
+    public function isDonationCenter()
+    {
+        return $this->role === 'donation_centre';
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
 }

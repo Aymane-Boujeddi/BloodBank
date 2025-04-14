@@ -28,15 +28,15 @@
 
                 <!-- Menu Desktop -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
-                    <a href="about.html" class="text-gray-600 hover:text-red-600 transition">À propos</a>
-                    <a href="contact.html" class="text-gray-600 hover:text-red-600 transition">Contact</a>
+                    <a href="{{ route('home') }}" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
+                    <a href="{{ route('about') }}" class="text-gray-600 hover:text-red-600 transition">À propos</a>
+                    <a href="{{ route('contact') }}" class="text-gray-600 hover:text-red-600 transition">Contact</a>
                     <div class="flex space-x-4">
-                        <a href="login.html"
+                        <a href="{{ route('login') }}"
                             class="bg-red-600 text-white px-6 py-2 rounded-full hover:bg-red-700 transition">
                             Connexion
                         </a>
-                        <a href="register.html"
+                        <a href="{{ route('register') }}"
                             class="bg-red-600 text-white px-6 py-2 rounded-full hover:bg-red-700 transition">
                             Inscription
                         </a>
@@ -46,11 +46,11 @@
                 <!-- Menu Mobile Content -->
                 <div class="hidden md:hidden absolute top-full left-0 right-0 bg-white shadow-md p-6" id="mobile-menu">
                     <div class="flex flex-col space-y-4">
-                        <a href="index.html" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
-                        <a href="about.html" class="text-gray-600 hover:text-red-600 transition">À propos</a>
-                        <a href="contact.html" class="text-gray-600 hover:text-red-600 transition">Contact</a>
-                        <a href="login.html" class="text-gray-600 hover:text-red-600 transition">Connexion</a>
-                        <a href="register.html" class="text-gray-600 hover:text-red-600 transition">Inscription</a>
+                        <a href="{{ route('home') }}" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
+                        <a href="{{ route('about') }}" class="text-gray-600 hover:text-red-600 transition">À propos</a>
+                        <a href="{{ route('contact') }}" class="text-gray-600 hover:text-red-600 transition">Contact</a>
+                        <a href="{{ route('login') }}" class="text-gray-600 hover:text-red-600 transition">Connexion</a>
+                        <a href="{{ route('register') }}" class="text-gray-600 hover:text-red-600 transition">Inscription</a>
                     </div>
                 </div>
             </div>
