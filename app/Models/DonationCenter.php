@@ -43,7 +43,17 @@ class DonationCenter extends Model
         return $this->belongsTo(City::class);
     }
 
-        
+    public function donations()
+    {
+        return $this->hasMany(Donation::class);
+    }
+
+    public function openingHours()
+    {
+        return $this->hasMany(OpeningHour::class);
+    }
+
+   
 
     // Helper method to get hours for a specific day
     public function getHoursForDay($day)
@@ -57,5 +67,4 @@ class DonationCenter extends Model
         $hours = $this->getHoursForDay($day);
         return $hours && !$hours->is_closed;
     }
-   
 }

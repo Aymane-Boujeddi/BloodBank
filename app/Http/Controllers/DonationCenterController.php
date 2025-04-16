@@ -7,8 +7,10 @@ use App\Http\Requests\StoreDonationCenterRequest;
 use App\Http\Requests\UpdateDonationCenterRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User; 
+use App\Models\User;
 use App\Models\Rdv;
+use Carbon\Carbon;
+
 class DonationCenterController extends Controller
 {
     /**
@@ -17,7 +19,7 @@ class DonationCenterController extends Controller
     public function index()
     {
         //
-        return view('donationCenter.dashboard');
+        return view('donor.center-dashboard');
     }
 
     /**
@@ -165,5 +167,146 @@ class DonationCenterController extends Controller
         $rdv->status = 'rejected';
         $rdv->save();
         return redirect()->route('donationCenter.appointments')->with('success', 'RDV rejeté avec succès.');
+    }
+    public function nearestCenterss(Request $request)
+    {
+        $request->validate([
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'radius' => 'nullable|numeric|min:1|max:100',
+        ]);
+
+        $userLat = $request->latitude;
+        $userLng = $request->longitude;
+        $radius = $request->radius ?? 25; // Default 25km radius
+
+        // Query centers within radius using Haversine formula
+        $centers = DonationCenter::select('donation_centers.*')
+            ->selectRaw("(6371 * acos(cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude)))) AS distance", [$userLat, $userLng, $userLat])
+            ->having('distance', '<=', $radius)
+            ->orderBy('distance')
+            ->get();
+
+        // Add additional fields like status based on opening hours
+        foreach ($centers as $center) {
+            $center->status = $this->calculateStatus($center);
+            // You could add additional data like estimated waiting time, etc.
+        }
+
+        return response()->json($centers);
+    }
+
+    private function calculateStatus($center)
+    {
+        // Get current time
+        $now = Carbon::now();
+        $openingTime = Carbon::parse($center->opening_time);
+        $closingTime = Carbon::parse($center->closing_time);
+
+        // Logic to determine if open, closing soon, or closed
+        if (!$center->is_active) {
+            return 'closed';
+        } elseif ($now->lt($openingTime) || $now->gt($closingTime)) {
+            return 'closed';
+        } elseif ($now->diffInMinutes($closingTime) <= 60) {
+            return 'closing-soon';
+        } else {
+            return 'open';
+        }
+    }
+    public function nearestCenters(Request $request)
+    {
+        $request->validate([
+            'city' => 'required|string|max:255', // City is now required
+        ]);
+
+        $city = $request->city; // Get the city from request
+
+        // Query centers in the specified city
+        $centersQuery = DonationCenter::select('donation_centers.*')
+        ->join('users', 'donation_centers.user_id', '=', 'users.id')
+            ->join('cities', 'users.city_id', '=', 'cities.id')
+            ->join('center_opening_hours', 'donation_centers.id', '=', 'center_opening_hours.donation_center_id')
+            ->where('cities.name', 'like', '%' . $city . '%');
+
+        $centers = $centersQuery->orderBy('center_name')->get();
+        // dd($centers);
+        // Get current day and time
+        $now = now();
+        $currentDay = strtolower($now->format('l')); // 'monday', 'tuesday', etc.
+        $currentTime = $now->format('H:i:s');
+
+        // Process centers to add necessary data for the view
+        foreach ($centers as $center) {
+            // Get opening hours for today
+            $todayHours = $center->openingHours()
+                ->where('day', $currentDay)
+                ->first();
+
+            // Check if the center is open, closed, or closing soon
+            if (!$todayHours || $todayHours->is_closed) {
+                $center->status = 'closed';
+                $center->hours = 'Fermé aujourd\'hui';
+            } else {
+                $openingTime = $todayHours->opening_time;
+                $closingTime = $todayHours->closing_time;
+
+                // Format for display
+                $center->hours = substr($openingTime, 0, 5) . ' - ' . substr($closingTime, 0, 5);
+
+                // Determine if open, closed, or closing soon
+                if ($currentTime < $openingTime) {
+                    $center->status = 'closed';
+                } elseif ($currentTime > $closingTime) {
+                    $center->status = 'closed';
+                } else {
+                    // Calculate if closing within 1 hour
+                    $closingDateTime = \Carbon\Carbon::createFromFormat('H:i:s', $closingTime);
+                    $currentDateTime = \Carbon\Carbon::createFromFormat('H:i:s', $currentTime);
+
+                    if ($closingDateTime->diffInMinutes($currentDateTime) <= 60) {
+                        $center->status = 'closing-soon';
+                    } else {
+                        $center->status = 'open';
+                    }
+                }
+            }
+
+            // Mock rating data
+            $center->rating = rand(35, 50) / 10;
+            $center->reviews = rand(10, 150);
+
+            // Add city name
+            $center->city_name = $center->city ? $center->city->name : '';
+        }
+
+        return response()->json($centers);
+    }
+
+    /**
+     * Save the donation center's location
+     */
+    public function saveLocation(Request $request)
+    {
+        $request->validate([
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+        ]);
+        dd($request->all());
+        
+        // Get current user's donation center
+        // $center = auth()->user()->donationCenter;
+        
+        if (!$center) {
+            return redirect()->back()->with('error', 'Centre de don introuvable');
+        }
+        
+        // Update location
+        $center->update([
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+        ]);
+        
+        return redirect()->route('donationCenter.profile')->with('success', 'Emplacement mis à jour avec succès');
     }
 }

@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('center_name');
             $table->string('address');
             $table->string('phone_number');
+            $table->float('latitude')->nullable();
+            $table->float('longitude')->nullable();
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });

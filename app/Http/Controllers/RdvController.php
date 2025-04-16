@@ -103,13 +103,18 @@ class RdvController extends Controller
         $rdv->save();
         return redirect()->route('donor.dashboard')->with('success', 'RDV rejeté avec succès');
     }
-    public function doneRdv($id)
+    public function doneRdv(Request $request)
     {
-        $rdv = Rdv::find($id);
+        $request->validate([
+            'id' => 'required|exists:rdvs,id',
+            'amount' => 'required|numeric|min:1'
+        ]);
+        $rdv = Rdv::find($request->id);
         Donation::create([
             'donor_id' => $rdv->donor_id,
             'donation_center_id' => $rdv->center_id,
             'donation_date' => now(),
+            'amount' => $request->amount,
         ]);
         $rdv->delete();
         $rdv->save();

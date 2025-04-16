@@ -7,50 +7,11 @@ use App\Http\Controllers\DonationController;
 use App\Http\Controllers\CentreController;
 use App\Http\Controllers\DonationCenterController;
 use App\Http\Controllers\DonorController;
+use App\Models\DonationCenter;
 
 Route::get('/', function () {
     return view('home');
 });
-
-Route::get('/days', function () {
-    return view('days');
-})->name('days');
-
-Route::get('/404', function () {
-    return view('404');
-})->name('404');
-
-Route::get('/about', function () {
-    return view('about');
-})->name('about');
-
-Route::get('/contact', function () {
-    return view('contact');
-})->name('contact');
-
-Route::get('/admin', function () {
-    return view('admin');
-})->name('admin');
-
-Route::get('/centre', function () {
-    return view('centre');
-})->name('centre');
-
-Route::get('/donneur', function () {
-    return view('donneur');
-})->name('donneur');
-
-Route::get('/login', function () {
-    return view('login');
-})->name('login');
-
-Route::get('/logout', function () {
-    return view('logout');
-})->name('logout');
-
-Route::get('/profile', function () {
-    return view('profile');
-})->name('profile');
 
 Route::get('/register', [UserController::class, 'showRegistrationForm'])->name('register');
 
@@ -71,24 +32,40 @@ Route::get('/center/appointment', [DonationCenterController::class, 'appointment
 
 Route::middleware(['auth', 'role:donor'])->group(function () {
     // Route::get('/donor', [UserController::class, 'showDonorDashboard'])->name('donor.dashboard');
-
 });
+Route::get('/donor/centers', [DonorController::class, 'centers'])->name('donor.centers');
+Route::get('/donor/centers/nearest', [DonationCenterController::class, 'nearestCenters'])->name('donor.centers.nearest');
+
 Route::middleware(['auth', 'role:donation_centre'])->group(function () {
     // Route::get('/donation-center', [UserController::class, 'showDonationCenterDashboard'])->name('donationCenter.dashboard');
-
+    
+    // Location management
 });
+Route::get('/center/location', [DonationCenterController::class, 'location'])->name('donationCenter.location');
+Route::post('/center/location', [DonationCenterController::class, 'saveLocation'])->name('donationCenter.saveLocation');
+
 Route::middleware(['auth', 'role:admin'])->group(function () {
     // Route::get('/admin', [UserController::class, 'showAdminDashboard'])->name('admin.dashboard');
-
 });
 
+Route::get('/days', function () {
+    return view('days');
+})->name('days');
+Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
-Route::get('/test', function () {
-    return view('donor.test');
-})->name('test');
-Route::get('/test2', function () {
-    return view('donationCenter.test');
-})->name('test');
-Route::get('/apts', function () {
-    return view('donationCenter.apts');
-})->name('apts');
+Route::middleware(['auth'])->group(function () {});
+
+Route::get('/donor/appointments', function () {
+    return view('donor.appointments');
+})->name('donor.appointments');
+Route::get('/center/location', function () {
+    return view('donationCenter.location');
+})->name('donationCenter.location');
+
+Route::get('/donor/history', function () {
+    return view('donor.history');
+})->name('donor.history');
+
+Route::get('/donor/reviews', function () {
+    return view('donor.reviews');
+})->name('donor.reviews');

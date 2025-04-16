@@ -4,9 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\DonationCenter;
+use App\Models\User;
 
-class DonationCenterSeeder extends Seeder
+class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,8 +14,8 @@ class DonationCenterSeeder extends Seeder
     public function run(): void
     {
         //
-        DonationCenter::factory(10)->create([
-            'user_id' => 1,
+        User::factory(10)->create([
+            'role' => 'donation_centre',
         ]);
     }
 }
