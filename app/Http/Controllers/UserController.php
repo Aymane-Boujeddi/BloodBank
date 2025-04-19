@@ -21,52 +21,16 @@ class UserController extends Controller
         return view('users.index');
     }
 
-    public function register(Request $request): RedirectResponse
+    public function register(Request $request)
     {
-        // dd($request->all());
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', Rules\Password::defaults()],
-            'role' => ['required', 'string', 'in:donor,donation_centre'],
-            'city_id' => ['required', 'exists:cities,id'],
-        ], [
-            'name.required' => 'Le nom est obligatoire.',
-            'email.required' => 'L\'adresse email est obligatoire.',
-            'email.email' => 'Veuillez fournir une adresse email valide.',
-            'email.unique' => 'Cette adresse email est déjà utilisée.',
-            'password.required' => 'Le mot de passe est obligatoire.',
-            'role.required' => 'Veuillez sélectionner un type de compte.',
-            'role.in' => 'Le type de compte sélectionné n\'est pas valide.',
-            'city_id.required' => 'Veuillez sélectionner une ville.',
-            'city_id.exists' => 'La ville sélectionnée n\'existe pas.',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'role' => 'required|in:donor,donation_centre',
+            'city_id' => 'required|exists:cities,id',
         ]);
-
-        if ($request->role === 'donor') {
-            $request->validate([
-                'phone_number' => ['required', 'string'],
-                'date_of_birth' => ['required', 'date', 'before_or_equal:' . now()->subYears(18)->format('Y-m-d')],
-                'blood_type_id' => ['required', 'exists:blood_types,id'],
-                'has_donated' => ['required', 'boolean'],
-            ], [
-                'phone_number.required' => 'Le numéro de téléphone est obligatoire.',
-                'date_of_birth.required' => 'La date de naissance est obligatoire.',
-                'date_of_birth.before_or_equal' => 'Vous devez avoir au moins 18 ans pour donner du sang.',
-                'blood_type_id.required' => 'Veuillez sélectionner votre groupe sanguin.',
-                'blood_type_id.exists' => 'Le groupe sanguin sélectionné n\'est pas valide.',
-                'has_donated.required' => 'Veuillez indiquer si vous avez déjà donné du sang.',
-            ]);
-        } elseif ($request->role === 'donation_centre') {
-            $request->validate([
-                'center_name' => ['required', 'string', 'max:255'],
-                'address' => ['required', 'string'],
-                'centre_phone' => ['required', 'string'],
-            ], [
-                'center_name.required' => 'Le nom du centre est obligatoire.',
-                'address.required' => 'L\'adresse du centre est obligatoire.',
-                'centre_phone.required' => 'Le numéro de téléphone du centre est obligatoire.',
-            ]);
-        }
+        // dd($request->all());
 
         $user = User::create([
             'name' => $request->name,
@@ -76,36 +40,13 @@ class UserController extends Controller
             'city_id' => $request->city_id,
         ]);
 
-        if ($request->role === 'donor') {
-            $donor = new Donor([
-                'phone_number' => $request->phone_number,
-                'date_of_birth' => $request->date_of_birth,
-                'blood_type_id' => $request->blood_type_id,
-                'has_donated' => $request->has_donated,
-            ]);
-            $user->donor()->save($donor);
-        } elseif ($request->role === 'donation_centre') {
-            $center = new DonationCenter([
-                'center_name' => $request->center_name,
-                'address' => $request->address,
-                'centre_phone' => $request->phone_number,
-                'user_id' => $user->id,
-            ]);
-            $user->donationCenter()->save($center);
-        }
-
-        event(new Registered($user));
         Auth::login($user);
 
-        if ($request->role === 'donor') {
-            return redirect(route('donor.dashboard', absolute: false));
-        } elseif ($request->role === 'donation_centre') {
-            return redirect(route('donationCenter.dashboard', absolute: false));
-        } elseif ($request->role === 'admin') {
-            return redirect(route('admin.dashboard', absolute: false));
+        if ($user->role === 'donor') {
+            return redirect()->route('donor-profile.complete');
+        } elseif ($user->role === 'donation_centre') {
+            return redirect()->route('center-profile.complete'); // FIXED: was redirecting to donor-profile.complete
         }
-
-        return redirect(route('home', absolute: false));
     }
 
     public function login(Request $request): RedirectResponse
@@ -119,10 +60,17 @@ class UserController extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
-
+            // dd($user);
             if ($user->role === 'donor') {
+                // dd($user);
+                if ($user->profile_status === 'incomplete') {
+                    return redirect()->route('donor-profile.complete');
+                }
                 return redirect()->intended(route('donor.dashboard'));
             } elseif ($user->role === 'donation_centre') {
+                if ($user->profile_status === 'incomplete') {
+                    return redirect()->route('center-profile.complete');
+                }
                 return redirect()->intended(route('donationCenter.dashboard'));
             } elseif ($user->role === 'admin') {
                 return redirect()->intended(route('admin.dashboard'));
@@ -141,5 +89,87 @@ class UserController extends Controller
         $cities = City::all();
         $bloodTypes = BloodType::all();
         return view('register', compact('cities', 'bloodTypes'));
+    }
+
+    public function showLoginForm()
+    {
+        return view('login');
+    }
+
+    public function logout(Request $request): RedirectResponse
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect(route('home'));
+    }
+
+    public function showCompleteProfileFormDonor()
+    {
+        $bloodTypes = BloodType::all();
+        return view('profile.complete-donor', compact('bloodTypes'));
+    }
+    public function showCompleteProfileFormCenter()
+    {
+        return view('profile.complete-center');
+    }
+
+    public function completeProfile(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($user->role === 'donor') {
+            $request->validate([
+                'phone_number' => 'required|string|max:20',
+                'date_of_birth' => 'required|date|before:today',
+                'has_donated' => 'required|boolean',
+            ]);
+
+            Donor::create([
+                'user_id' => $user->id,
+                'phone_number' => $request->phone_number,
+                'date_of_birth' => $request->date_of_birth,
+                'blood_type_id' => $request->blood_type_id,
+                'has_donated' => $request->has_donated,
+            ]);
+            $donor = User::where('id', $user->id)->first();
+            $donor->profile_status = 'complete';
+            $donor->save();
+
+            return redirect()->route('donor.dashboard')->with('success', 'Your profile has been completed successfully.');
+        } elseif ($user->role === 'donation_centre') {
+            // dd($request->all());
+            $request->validate([
+                'center_name' => 'required|string|max:255',
+                'address' => 'required|string|max:500',
+                'phone_number' => 'required|string|max:20',
+                'latitude' => 'required|numeric',
+                'longitude' => 'required|numeric',
+                'opening_time' => 'required',
+                'closing_time' => 'required',
+            ]);
+            // dd($request->longitude);
+            $latitude = (float) $request->latitude;
+            $longitude = (float) $request->longitude;
+
+            DonationCenter::create([
+                'user_id' => $user->id,
+                'center_name' => $request->center_name,
+                'address' => $request->address,
+                'phone_number' => $request->phone_number,
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+                'opening_time' => $request->opening_time,
+                'closing_time' => $request->closing_time,
+            ]);
+            $center = User::where('id', $user->id)->first();
+            $center->profile_status = 'complete';
+            $center->save();
+
+            return redirect()->route('donationCenter.dashboard')->with('success', 'Your profile has been completed successfully.');
+        }
+
+        return redirect()->route('home')->with('error', 'Invalid user role.');
     }
 }

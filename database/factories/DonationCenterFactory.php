@@ -25,6 +25,8 @@ class DonationCenterFactory extends Factory
                 ?? User::factory()->create(['role' => 'donation_centre'])->id,
             'latitude' => fake()->latitude(),
             'longitude' => fake()->longitude(),
+            'opening_time' => fake()->time(),
+            'closing_time' => fake()->time(),
         ];
     }
 }

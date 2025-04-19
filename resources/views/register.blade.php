@@ -140,149 +140,6 @@
                             @enderror
                         </div>
 
-                        <!-- Conditional Fields -->
-                        <div id="donor-fields" class="space-y-6 @if (old('role') == 'donation_centre') hidden @endif">
-                            <!-- Téléphone (pour les donneurs) -->
-                            <div>
-                                <label for="phone_number" class="block text-sm font-medium text-gray-700 mb-2">Numéro
-                                    de téléphone</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <i class="fas fa-phone text-gray-400"></i>
-                                    </div>
-                                    <input type="tel" id="phone_number" name="phone_number"
-                                        value="{{ old('phone_number') }}"
-                                        class="w-full pl-10 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent @error('phone_number') border-red-500 @enderror"
-                                        placeholder="Votre numéro de téléphone">
-                                </div>
-                                @error('phone_number')
-                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Date de naissance (pour les donneurs) -->
-                            <div>
-                                <label for="date_of_birth" class="block text-sm font-medium text-gray-700 mb-2">Date
-                                    de naissance</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <i class="fas fa-calendar-alt text-gray-400"></i>
-                                    </div>
-                                    <input type="date" id="date_of_birth" name="date_of_birth"
-                                        value="{{ old('date_of_birth') }}"
-                                        class="w-full pl-10 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent @error('date_of_birth') border-red-500 @enderror">
-                                </div>
-                                @error('date_of_birth')
-                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Blood Type (for donors) - add after date of birth -->
-                            <div>
-                                <label for="blood_type_id" class="block text-sm font-medium text-gray-700 mb-2">Groupe
-                                    sanguin</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <i class="fas fa-tint text-gray-400"></i>
-                                    </div>
-                                    <select id="blood_type_id" name="blood_type_id"
-                                        class="w-full pl-10 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent appearance-none @error('blood_type_id') border-red-500 @enderror">
-                                        <option value="">Sélectionnez votre groupe sanguin</option>
-                                        @foreach ($bloodTypes ?? [] as $bloodType)
-                                            <option value="{{ $bloodType->id }}"
-                                                {{ old('blood_type_id') == $bloodType->id ? 'selected' : '' }}>
-                                                {{ $bloodType->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <div
-                                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                        <i class="fas fa-chevron-down"></i>
-                                    </div>
-                                </div>
-                                @error('blood_type_id')
-                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Add this inside the donor-fields div, after the blood type selection -->
-                            <div>
-                                <label for="has_donated" class="block text-sm font-medium text-gray-700 mb-2">Avez-vous déjà donné du sang?</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <i class="fas fa-history text-gray-400"></i>
-                                    </div>
-                                    <select id="has_donated" name="has_donated" 
-                                        class="w-full pl-10 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent appearance-none @error('has_donated') border-red-500 @enderror">
-                                        <option value="" disabled {{ old('has_donated') === null ? 'selected' : '' }}>Sélectionnez une option</option>
-                                        <option value="1" {{ old('has_donated') === '1' ? 'selected' : '' }}>Oui, j'ai déjà fait un don de sang</option>
-                                        <option value="0" {{ old('has_donated') === '0' ? 'selected' : '' }}>Non, ce sera ma première fois</option>
-                                    </select>
-                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                        <i class="fas fa-chevron-down"></i>
-                                    </div>
-                                </div>
-                                @error('has_donated')
-                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div id="center-fields" class="space-y-6 @if (old('role', 'donor') == 'donor') hidden @endif">
-                            <!-- Nom du centre -->
-                            <div>
-                                <label for="center_name" class="block text-sm font-medium text-gray-700 mb-2">Nom du
-                                    centre</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <i class="fas fa-hospital text-gray-400"></i>
-                                    </div>
-                                    <input type="text" id="center_name" name="center_name"
-                                        value="{{ old('center_name') }}"
-                                        class="w-full pl-10 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent @error('center_name') border-red-500 @enderror"
-                                        placeholder="Nom du centre de don">
-                                </div>
-                                @error('center_name')
-                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Adresse -->
-                            <div>
-                                <label for="address"
-                                    class="block text-sm font-medium text-gray-700 mb-2">Adresse</label>
-                                <div class="relative">
-                                    <div class="absolute top-3 left-0 pl-3 flex items-center pointer-events-none">
-                                        <i class="fas fa-map-marker-alt text-gray-400"></i>
-                                    </div>
-                                    <textarea id="address" name="address" rows="2"
-                                        class="w-full pl-10 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent @error('address') border-red-500 @enderror"
-                                        placeholder="Adresse complète du centre">{{ old('address') }}</textarea>
-                                </div>
-                                @error('address')
-                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Téléphone (pour le centre) -->
-                            <div>
-                                <label for="center_phone"
-                                    class="block text-sm font-medium text-gray-700 mb-2">Téléphone du centre</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <i class="fas fa-phone text-gray-400"></i>
-                                    </div>
-                                    <input type="tel" id="center_phone" name="center_phone"
-                                        value="{{ old('center_phone') }}"
-                                        class="w-full pl-10 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent @error('center_phone') border-red-500 @enderror"
-                                        placeholder="Numéro de téléphone du centre">
-                                </div>
-                                @error('center_phone')
-                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
-
                         <!-- Ville -->
                         <div>
                             <label for="city_id" class="block text-sm font-medium text-gray-700 mb-2">Ville</label>
@@ -350,36 +207,19 @@
                                     d'utilisation</a></label>
                         </div>
 
+                        <!-- Notification about step 2 -->
+                        <div class="bg-blue-50 text-blue-700 p-3 rounded-md text-sm">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            Après votre inscription, vous pourrez compléter votre profil avec des informations
+                            supplémentaires.
+                        </div>
+
                         <!-- Bouton de connexion -->
                         <button type="submit"
                             class="w-full bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition transform hover:scale-105">
                             Créer mon compte
                         </button>
                     </form>
-
-                    <!-- Séparateur -->
-                    <div class="relative my-6">
-                        <div class="absolute inset-0 flex items-center">
-                            <div class="w-full border-t border-gray-300"></div>
-                        </div>
-                        <div class="relative flex justify-center text-sm">
-                            <span class="px-2 bg-white text-gray-500">Ou inscrivez-vous avec</span>
-                        </div>
-                    </div>
-
-                    <!-- Boutons sociaux -->
-                    <div class="grid grid-cols-2 gap-4">
-                        <button
-                            class="flex items-center justify-center px-4 py-2 border rounded-lg hover:bg-gray-50 transition">
-                            <i class="fab fa-google text-red-600 mr-2"></i>
-                            Google
-                        </button>
-                        <button
-                            class="flex items-center justify-center px-4 py-2 border rounded-lg hover:bg-gray-50 transition">
-                            <i class="fab fa-facebook text-blue-600 mr-2"></i>
-                            Facebook
-                        </button>
-                    </div>
 
                     <!-- Lien d'inscription -->
                     <p class="text-center mt-6 text-gray-600">
@@ -429,6 +269,7 @@
     <script>
         // Menu mobile
         document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
 
@@ -448,64 +289,60 @@
                 });
             }
 
-            // Toggle form fields based on user type
+            // Role selection styling
             const donorRadio = document.getElementById('role_donor');
             const centerRadio = document.getElementById('role_donation_centre');
-            const donorFields = document.getElementById('donor-fields');
-            const centerFields = document.getElementById('center-fields');
 
-            if (donorRadio && centerRadio && donorFields && centerFields) {
-                // Initial state setup - ensure form is in correct state on page load
-                function updateFieldVisibility() {
+            if (donorRadio && centerRadio) {
+                // Function to update radio button styling
+                function updateRadioStyles() {
+                    // Donor radio styling
+                    const donorLabel = donorRadio.closest('label');
+                    const donorIcon = donorLabel.querySelector('i');
+                    const donorText = donorLabel.querySelector('span');
+
+                    // Center radio styling
+                    const centerLabel = centerRadio.closest('label');
+                    const centerIcon = centerLabel.querySelector('i');
+                    const centerText = centerLabel.querySelector('span');
+
                     if (donorRadio.checked) {
-                        donorFields.classList.remove('hidden');
-                        centerFields.classList.add('hidden');
+                        // Donor selected
+                        donorLabel.classList.add('bg-red-50', 'border-red-500');
+                        donorIcon.classList.add('text-red-600');
+                        donorIcon.classList.remove('text-gray-500');
+                        donorText.classList.add('text-red-600');
+                        donorText.classList.remove('text-gray-700');
 
-                        // Update styles for user type selection
-                        donorRadio.closest('label').classList.add('bg-red-50', 'border-red-500');
-                        centerRadio.closest('label').classList.remove('bg-red-50', 'border-red-500');
+                        // Reset center styling
+                        centerLabel.classList.remove('bg-red-50', 'border-red-500');
+                        centerIcon.classList.remove('text-red-600');
+                        centerIcon.classList.add('text-gray-500');
+                        centerText.classList.remove('text-red-600');
+                        centerText.classList.add('text-gray-700');
+                    } else if (centerRadio.checked) {
+                        // Center selected
+                        centerLabel.classList.add('bg-red-50', 'border-red-500');
+                        centerIcon.classList.add('text-red-600');
+                        centerIcon.classList.remove('text-gray-500');
+                        centerText.classList.add('text-red-600');
+                        centerText.classList.remove('text-gray-700');
 
-                        centerRadio.closest('label').querySelector('i').classList.remove('text-red-600');
-                        centerRadio.closest('label').querySelector('i').classList.add('text-gray-500');
-
-                        donorRadio.closest('label').querySelector('i').classList.add('text-red-600');
-                        donorRadio.closest('label').querySelector('i').classList.remove('text-gray-500');
-
-                        // Also update text colors
-                        donorRadio.closest('label').querySelector('span').classList.add('text-red-600');
-                        donorRadio.closest('label').querySelector('span').classList.remove('text-gray-700');
-
-                        centerRadio.closest('label').querySelector('span').classList.remove('text-red-600');
-                        centerRadio.closest('label').querySelector('span').classList.add('text-gray-700');
-                    } else {
-                        donorFields.classList.add('hidden');
-                        centerFields.classList.remove('hidden');
-
-                        // Update styles for user type selection
-                        donorRadio.closest('label').classList.remove('bg-red-50', 'border-red-500');
-                        centerRadio.closest('label').classList.add('bg-red-50', 'border-red-500');
-
-                        donorRadio.closest('label').querySelector('i').classList.remove('text-red-600');
-                        donorRadio.closest('label').querySelector('i').classList.add('text-gray-500');
-
-                        centerRadio.closest('label').querySelector('i').classList.add('text-red-600');
-                        centerRadio.closest('label').querySelector('i').classList.remove('text-gray-500');
-
-                        // Also update text colors
-                        centerRadio.closest('label').querySelector('span').classList.add('text-red-600');
-                        centerRadio.closest('label').querySelector('span').classList.remove('text-gray-700');
-
-                        donorRadio.closest('label').querySelector('span').classList.remove('text-red-600');
-                        donorRadio.closest('label').querySelector('span').classList.add('text-gray-700');
+                        // Reset donor styling
+                        donorLabel.classList.remove('bg-red-50', 'border-red-500');
+                        donorIcon.classList.remove('text-red-600');
+                        donorIcon.classList.add('text-gray-500');
+                        donorText.classList.remove('text-red-600');
+                        donorText.classList.add('text-gray-700');
                     }
                 }
 
-                // Set up initial state
-                updateFieldVisibility();
+                // Set initial state
+                updateRadioStyles();
 
                 // Add event listeners
-                donorRadio.addEventListener('change', updateFieldVisibility);
-                centerRadio.addEventListener('change', updateFieldVisibility);
+                donorRadio.addEventListener('change', updateRadioStyles);
+                centerRadio.addEventListener('change', updateRadioStyles);
             }
         });
     </script>

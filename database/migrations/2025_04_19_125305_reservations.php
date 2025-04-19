@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('opening_hours', function (Blueprint $table) {
+        //
+        Schema::create('reservations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('donation_center_id')->constrained()->onDelete('cascade');
-            $table->enum('day_of_week', ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])->unique();
-            $table->time('opening_time')->nullable();
-            $table->time('closing_time')->nullable();
-            $table->boolean('is_open')->default(true);
+            $table->foreignId('donor_id')->constrained()->onDelete('cascade');
+            $table->date('reservation_date');
+            $table->time('reservation_time');
+            $table->enum('status',['pending','confirmed','cancelled'])->default('pending');
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('opening_hours');
+        //
     }
 };

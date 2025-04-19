@@ -16,8 +16,10 @@ return new class extends Migration
             $table->string('center_name');
             $table->string('address');
             $table->string('phone_number');
-            $table->float('latitude')->nullable();
-            $table->float('longitude')->nullable();
+            $table->double('latitude');
+            $table->double('longitude');
+            $table->time('opening_time');
+            $table->time('closing_time');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });

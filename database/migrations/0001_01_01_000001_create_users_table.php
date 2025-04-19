@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->foreignId('city_id')->nullable()->references('id')->on('cities')->onDelete('set null')->onUpdate('set null');
             $table->enum('role', ['donor', 'admin','donation_centre']);
+            $table->enum('profile_status', ['incomplete', 'complete'])->default('incomplete');
             $table->rememberToken();
             $table->timestamps();
         });

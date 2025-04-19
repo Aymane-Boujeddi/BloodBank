@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OpeningHour;
+use App\Models\DonationSlot;
 use Illuminate\Http\Request;
 
-class OpeningHourController extends Controller
+class DonationSlotController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class OpeningHourController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(OpeningHour $openingHour)
+    public function show(DonationSlot $donationSlot)
     {
         //
     }
@@ -42,7 +42,7 @@ class OpeningHourController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(OpeningHour $openingHour)
+    public function edit(DonationSlot $donationSlot)
     {
         //
     }
@@ -50,7 +50,7 @@ class OpeningHourController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, OpeningHour $openingHour)
+    public function update(Request $request, DonationSlot $donationSlot)
     {
         //
     }
@@ -58,7 +58,7 @@ class OpeningHourController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(OpeningHour $openingHour)
+    public function destroy(DonationSlot $donationSlot)
     {
         //
     }

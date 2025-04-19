@@ -71,6 +71,12 @@
                     <a href="#reviews" class="px-3 py-2 text-gray-600 hover:text-red-600">
                         <i class="fas fa-star mr-1"></i> Avis
                     </a>
+                    <form action="{{ route('logout') }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="px-3 py-2 text-gray-600 hover:text-red-600 bg-transparent border-0">
+                            <i class="fas fa-sign-out-alt mr-1"></i> Déconnexion
+                        </button>
+                    </form>
 
                     <!-- User Menu -->
                     <div class="relative ml-3">

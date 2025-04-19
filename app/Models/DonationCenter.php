@@ -11,11 +11,15 @@ class DonationCenter extends Model
     use HasFactory;
 
     protected $fillable = [
-        'center_name', // This needs to match your migration field
+        'center_name', 
         'address',
         'phone_number',
         'city_id',
-        'user_id'
+        'user_id',
+        'latitude',
+        'longitude',
+        'opening_time',
+        'closing_time',
     ];
 
     public function user()
@@ -23,9 +27,9 @@ class DonationCenter extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function hours()
+   public function donationSlots()
     {
-        return $this->hasMany(DonationCenterHour::class);
+        return $this->hasMany(DonationSlot::class);
     }
 
     public function donors()
@@ -35,7 +39,7 @@ class DonationCenter extends Model
 
     public function reservations()
     {
-        return $this->hasMany(Rdv::class);
+        return $this->hasMany(Reservation::class);
     }
 
     public function city()
@@ -48,23 +52,7 @@ class DonationCenter extends Model
         return $this->hasMany(Donation::class);
     }
 
-    public function openingHours()
-    {
-        return $this->hasMany(OpeningHour::class);
-    }
-
    
 
-    // Helper method to get hours for a specific day
-    public function getHoursForDay($day)
-    {
-        return $this->hours()->where('day_of_week', strtolower($day))->first();
-    }
-
-    // Helper method to check if center is open on a specific day
-    public function isOpenOnDay($day)
-    {
-        $hours = $this->getHoursForDay($day);
-        return $hours && !$hours->is_closed;
-    }
+   
 }

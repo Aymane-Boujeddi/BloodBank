@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Rdv;
+use App\Models\Reservation;
 
 class Donor extends Model
 {
@@ -29,7 +30,6 @@ class Donor extends Model
         return $this->belongsTo(User::class);
     }
 
-
     public function city()
     {
         return $this->belongsTo(City::class);
@@ -37,7 +37,7 @@ class Donor extends Model
 
     public function reservations()
     {
-        return $this->hasMany(Rdv::class);
+        return $this->hasMany(Reservation::class);
     }
 
     public function donationCenter()
