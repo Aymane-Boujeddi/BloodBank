@@ -20,6 +20,7 @@ return new class extends Migration
             $table->double('longitude');
             $table->time('opening_time');
             $table->time('closing_time');
+            $table->integer('hourly_rate')->default(0);
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
