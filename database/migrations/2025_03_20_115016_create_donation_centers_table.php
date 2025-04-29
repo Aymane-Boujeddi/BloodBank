@@ -21,6 +21,7 @@ return new class extends Migration
             $table->time('opening_time');
             $table->time('closing_time');
             $table->integer('hourly_rate')->default(0);
+            $table->enum('status', ['pending', 'approved','rejected'])->default('pending');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
