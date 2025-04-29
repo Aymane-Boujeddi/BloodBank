@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AvailableDays;
 use App\Models\Donor;
 use App\Models\DonationCenter;
 use App\Models\User;
@@ -31,7 +32,6 @@ class UserController extends Controller
             'city_id' => 'required|exists:cities,id',
         ]);
         // dd($request->all());
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -45,7 +45,7 @@ class UserController extends Controller
         if ($user->role === 'donor') {
             return redirect()->route('donor-profile.complete');
         } elseif ($user->role === 'donation_centre') {
-            return redirect()->route('center-profile.complete'); // FIXED: was redirecting to donor-profile.complete
+            return redirect()->route('center-profile.complete');
         }
     }
 
@@ -60,9 +60,8 @@ class UserController extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
-            // dd($user);
+
             if ($user->role === 'donor') {
-                // dd($user);
                 if ($user->profile_status === 'incomplete') {
                     return redirect()->route('donor-profile.complete');
                 }
@@ -71,6 +70,20 @@ class UserController extends Controller
                 if ($user->profile_status === 'incomplete') {
                     return redirect()->route('center-profile.complete');
                 }
+
+                $centre = DonationCenter::where('user_id', $user->id)->first();
+                if ($centre && $centre->status !== 'approved') {
+                    Auth::logout();
+                    $request->session()->invalidate();
+                    $request->session()->regenerateToken();
+
+                    $message = $centre->status === 'rejected'
+                        ? 'Your donation center profile has been rejected.'
+                        : 'Your donation center profile is still pending approval.';
+
+                    return redirect()->route('login')->with('error', $message);
+                }
+
                 return redirect()->intended(route('donationCenter.dashboard'));
             } elseif ($user->role === 'admin') {
                 return redirect()->intended(route('admin.dashboard'));
@@ -146,14 +159,17 @@ class UserController extends Controller
                 'phone_number' => 'required|string|max:20',
                 'latitude' => 'required|numeric',
                 'longitude' => 'required|numeric',
-                'opening_time' => 'required',
-                'closing_time' => 'required',
+                'opening_time' => ['required', 'date_format:H:i'],
+                'closing_time' => ['required', 'date_format:H:i'],
+                'hourly_rate' => 'required|integer|min:0',
+                'available_days' => 'required|array|min:1',
+                'available_days.*' => 'in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
             ]);
             // dd($request->longitude);
             $latitude = (float) $request->latitude;
             $longitude = (float) $request->longitude;
-
-            DonationCenter::create([
+            // dd($request->hourly_rate);
+            $center = DonationCenter::create([
                 'user_id' => $user->id,
                 'center_name' => $request->center_name,
                 'address' => $request->address,
@@ -162,12 +178,22 @@ class UserController extends Controller
                 'longitude' => $longitude,
                 'opening_time' => $request->opening_time,
                 'closing_time' => $request->closing_time,
+                'hourly_rate' => $request->hourly_rate,
             ]);
-            $center = User::where('id', $user->id)->first();
-            $center->profile_status = 'complete';
-            $center->save();
+            foreach ($request->available_days as $day) {
+                $center->availableDays()->create([
+                    'day' => $day
+                ]);
+            }
+            $userCenter = User::where('id', $user->id)->first();
+            $userCenter->profile_status = 'complete';
+            $userCenter->save();
 
-            return redirect()->route('donationCenter.dashboard')->with('success', 'Your profile has been completed successfully.');
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('login')->with('info', 'Your profile has been completed successfully. Your donation center is now pending approval. You will be able to log in once approved.');
         }
 
         return redirect()->route('home')->with('error', 'Invalid user role.');
