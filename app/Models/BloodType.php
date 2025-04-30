@@ -4,16 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class City extends Model
+class BloodType extends Model
 {
     //
     protected $fillable = [
-        'name'
+        'name',
     ];
-
-    public function users()
+    function donors()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(Donor::class);
     }
- 
 }

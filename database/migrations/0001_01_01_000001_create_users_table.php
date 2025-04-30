@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->foreignId('city_id')->references('id')->on('cities')->onDelete('set null');
+            $table->foreignId('city_id')->nullable()->references('id')->on('cities')->onDelete('set null')->onUpdate('set null');
             $table->enum('role', ['donor', 'admin','donation_centre']);
-            $table->rememberToken();
+            $table->enum('profile_status', ['incomplete', 'complete'])->default('incomplete');
+            $table->timestamp('last_login');
             $table->timestamps();
         });
 

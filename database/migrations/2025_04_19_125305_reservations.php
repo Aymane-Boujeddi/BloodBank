@@ -12,11 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         //
-        Schema::create('donations', function (Blueprint $table) {
+        Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('donor_id')->constrained()->onDelete('cascade');
             $table->foreignId('donation_center_id')->constrained()->onDelete('cascade');
-            $table->date('donation_date');
+            $table->foreignId('donor_id')->constrained()->onDelete('cascade');
+            $table->date('reservation_date');
+            $table->time('reservation_time');
+            $table->enum('status',['pending','confirmed','cancelled'])->default('pending');
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

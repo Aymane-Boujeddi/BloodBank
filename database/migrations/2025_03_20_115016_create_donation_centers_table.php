@@ -16,8 +16,13 @@ return new class extends Migration
             $table->string('center_name');
             $table->string('address');
             $table->string('phone_number');
-            $table->foreignId('user_id')->references('users')->on('id')->onDelete('cascade');
-            $table->foreignId('city_id')->references('id')->on('cities')->onDelete('set null');
+            $table->double('latitude');
+            $table->double('longitude');
+            $table->time('opening_time');
+            $table->time('closing_time');
+            $table->integer('hourly_rate')->default(0);
+            $table->enum('status', ['pending', 'approved','rejected'])->default('pending');
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

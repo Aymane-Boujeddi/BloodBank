@@ -1,24 +1,23 @@
 <?php
-// DonationCenterHour.php model
-
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DonationCenterHour extends Model
+class Donation extends Model
 {
-    use HasFactory;
-
+    //
     protected $fillable = [
+        'donor_id',
         'donation_center_id',
-        'day_of_week',
-        'opening_time',
-        'closing_time',
-        'is_closed'
+        'donation_date',
+        'amount',
     ];
 
+    public function donor()
+    {
+        return $this->belongsTo(Donor::class);
+    }
     public function donationCenter()
     {
         return $this->belongsTo(DonationCenter::class);

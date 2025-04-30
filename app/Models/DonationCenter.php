@@ -11,30 +11,48 @@ class DonationCenter extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'center_name', 
         'address',
         'phone_number',
         'city_id',
-        'user_id'
+        'user_id',
+        'latitude',
+        'longitude',
+        'opening_time',
+        'closing_time',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
+   public function donationSlots()
+    {
+        return $this->hasMany(DonationSlot::class);
+    }
 
-    public function hours()
-{
-    return $this->hasMany(DonationCenterHour::class);
-}
+    public function donors()
+    {
+        return $this->hasMany(Donor::class);
+    }
 
-// Helper method to get hours for a specific day
-public function getHoursForDay($day)
-{
-    return $this->hours()->where('day_of_week', strtolower($day))->first();
-}
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
 
-// Helper method to check if center is open on a specific day
-public function isOpenOnDay($day)
-{
-    $hours = $this->getHoursForDay($day);
-    return $hours && !$hours->is_closed;
-}
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function donations()
+    {
+        return $this->hasMany(Donation::class);
+    }
+
+   
+
+   
 }
