@@ -56,7 +56,7 @@
 
     <div class="flex space-x-4 mb-6">
         <button type="button" data-tab="pending"
-            class="tab-btn pending-tab active flex-1 py-4 px-6 rounded-lg font-medium text-center transition-all bg-white shadow-sm " >
+            class="tab-btn pending-tab active flex-1 py-4 px-6 rounded-lg font-medium text-center transition-all bg-white shadow-sm ">
             <div class="flex items-center justify-center">
                 <i class="fas fa-clock mr-2"></i>
                 <span>Rendez-vous en attente</span>
@@ -120,9 +120,10 @@
                                         @method('POST')
                                         <input type="hidden" name="id" value="{{ $reservation->id }}">
                                         <button type="submit"
-                                            class="p-2 text-green-600 hover:bg-green-50 rounded-full transition-colors"
+                                            class="flex items-center px-3 py-1.5 text-green-600 hover:bg-green-50 rounded-md border border-green-200 transition-colors"
                                             title="Confirmer">
-                                            <i class="fas fa-check"></i>
+                                            <i class="fas fa-check mr-1.5"></i>
+                                            <span>Confirmer</span>
                                         </button>
                                     </form>
                                     <form action="{{ route('donationCenter.rejectReservation') }}" method="POST"
@@ -131,9 +132,10 @@
                                         @method('POST')
                                         <input type="hidden" name="id" value="{{ $reservation->id }}">
                                         <button type="submit"
-                                            class="p-2 text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                                            class="flex items-center px-3 py-1.5 text-red-600 hover:bg-red-50 rounded-md border border-red-200 transition-colors"
                                             title="Refuser">
-                                            <i class="fas fa-times"></i>
+                                            <i class="fas fa-times mr-1.5"></i>
+                                            <span>Refuser</span>
                                         </button>
                                     </form>
                                 </div>
@@ -188,29 +190,29 @@
                                     </div>
                                 </div>
                                 <div class="ml-auto flex items-center space-x-2">
-                                    <button class="p-2 text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
-                                        title="Modifier">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <form action="{{ route('donationCenter.completeReservation') }}" method="POST"
-                                        class="inline">
-                                        @csrf
-                                        <input type="hidden" name="id" value="{{ $reservation->id }}">
-                                        <input type="hidden" name="amount" value="450">
-                                        <button type="submit"
-                                            class="p-2 text-green-600 hover:bg-green-50 rounded-full transition-colors"
-                                            title="Marquer comme terminé">
-                                            <i class="fas fa-check-double"></i>
-                                        </button>
-                                    </form>
-                                    <form action="{{ route('donationCenter.rejectReservation', $reservation->id) }}"
+                                    <form action="{{ route('donationCenter.toPendingReservation') }}"
                                         method="POST" class="inline">
                                         @csrf
                                         @method('POST')
+                                        <input type="hidden" name="id" value="{{ $reservation->id }}">
                                         <button type="submit"
-                                            class="p-2 text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                                            class="flex items-center px-3 py-1.5 text-red-600 hover:bg-red-50 rounded-md border border-red-200 transition-colors"
                                             title="Annuler">
-                                            <i class="fas fa-times"></i>
+                                            <i class="fas fa-times mr-1.5"></i>
+                                            <span>Annuler</span>
+                                        </button>
+                                    </form>
+                                    {{-- {{$reservation->id}} --}}
+                                    <form action="{{ route('donationCenter.recordDonation') }}"
+                                        method="POST" class="inline ml-2">
+                                        @csrf
+                                        @method('POST')
+                                        <input type="hidden" name="id" value="{{ $reservation->id }}">
+                                        <button type="submit"
+                                            class="flex items-center px-3 py-1.5 text-blue-600 hover:bg-blue-50 rounded-md border border-blue-200 transition-colors"
+                                            title="Enregistrer un don">
+                                            <i class="fas fa-tint mr-1.5"></i>
+                                            <span>Enregistrer don</span>
                                         </button>
                                     </form>
                                 </div>
