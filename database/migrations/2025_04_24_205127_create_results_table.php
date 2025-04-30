@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('donation_id')->constrained()->onDelete('cascade');
 
             $table->string('blood_type')->nullable();
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
 
             $table->float('hemoglobin', 5, 2)->nullable();
             $table->string('blood_pressure')->nullable();
