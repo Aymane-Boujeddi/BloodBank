@@ -22,6 +22,13 @@ class UserController extends Controller
         return view('users.index');
     }
 
+    private function updateLogin($userId)
+    {
+        $user = User::find($userId);
+        $user->last_login = now();
+        $user->save();
+    }
+
     public function register(Request $request)
     {
         $request->validate([
@@ -38,6 +45,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
             'role' => $request->role,
             'city_id' => $request->city_id,
+            'last_login' => now(),
         ]);
 
         Auth::login($user);
@@ -65,6 +73,7 @@ class UserController extends Controller
                 if ($user->profile_status === 'incomplete') {
                     return redirect()->route('donor-profile.complete');
                 }
+                $this->updateLogin($user->id);
                 return redirect()->intended(route('donor.dashboard'));
             } elseif ($user->role === 'donation_centre') {
                 if ($user->profile_status === 'incomplete') {
@@ -83,6 +92,8 @@ class UserController extends Controller
 
                     return redirect()->route('login')->with('error', $message);
                 }
+                // dd($centre->status);
+                $this->updateLogin($user->id);
 
                 return redirect()->intended(route('donationCenter.dashboard'));
             } elseif ($user->role === 'admin') {
@@ -148,7 +159,9 @@ class UserController extends Controller
             ]);
             $donor = User::where('id', $user->id)->first();
             $donor->profile_status = 'complete';
+            $donor->last_login = now();
             $donor->save();
+           
 
             return redirect()->route('donor.dashboard')->with('success', 'Your profile has been completed successfully.');
         } elseif ($user->role === 'donation_centre') {
@@ -187,11 +200,13 @@ class UserController extends Controller
             }
             $userCenter = User::where('id', $user->id)->first();
             $userCenter->profile_status = 'complete';
+            $userCenter->last_login = now();
             $userCenter->save();
 
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
+            
 
             return redirect()->route('login')->with('info', 'Your profile has been completed successfully. Your donation center is now pending approval. You will be able to log in once approved.');
         }
