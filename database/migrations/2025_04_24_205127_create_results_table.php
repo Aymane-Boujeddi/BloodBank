@@ -21,16 +21,13 @@ return new class extends Migration
             $table->float('hemoglobin', 5, 2)->nullable();
             $table->string('blood_pressure')->nullable();
             $table->float('pulse', 5, 2)->nullable();
-
-            // General health status
+            $table->integer('amount');
             $table->boolean('has_medical_issues')->default(false);
             $table->text('medical_notes')->nullable();
             $table->date('next_eligible_donation_date')->nullable();
 
-            // Certificate and appreciation
             $table->boolean('certificate_generated')->default(false);
 
-            // Timestamps
             $table->dateTime('published_at')->nullable();
             $table->timestamps();
         });
