@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DonSang - Complétez votre profil</title>
+    <title>BloodBank - Complétez votre profil</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://unpkg.com/scrollreveal"></script>
@@ -16,7 +16,7 @@
         <div class="container mx-auto px-6 py-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <a href="/" class="text-red-600 text-2xl font-bold">DonSang</a>
+                    <a href="/" class="text-red-600 text-2xl font-bold">BloodBank</a>
                 </div>
 
                 <!-- Menu Mobile -->
@@ -218,7 +218,7 @@
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <h3 class="text-xl font-semibold mb-4">DonSang</h3>
+                    <h3 class="text-xl font-semibold mb-4">BloodBank</h3>
                     <p class="text-gray-400">Ensemble, sauvons des vies</p>
                 </div>
                 <div>
