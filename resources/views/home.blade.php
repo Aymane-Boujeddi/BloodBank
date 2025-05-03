@@ -36,29 +36,27 @@
 </head>
 
 <body class="font-sans bg-gray-50">
-    <!-- Barre de Navigation -->
     <nav class="fixed w-full bg-white shadow-md z-50">
         <div class="container mx-auto px-6 py-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <a href="/" class="flex items-center">
+                    <a href="{{ route('welcome') }}" class="flex items-center">
                         <i class="fas fa-tint text-red-600 text-2xl mr-2"></i>
                         <span class="text-red-600 text-2xl font-bold">BloodBank</span>
                     </a>
                 </div>
 
-                <!-- Menu Mobile -->
                 <div class="md:hidden">
                     <button id="mobile-menu-button" class="text-gray-500 hover:text-gray-600">
                         <i class="fas fa-bars text-2xl"></i>
                     </button>
                 </div>
 
-                <!-- Menu Desktop -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="/" class="text-gray-600 hover:text-red-600 transition font-medium">Accueil</a>
-                    <a href="/about" class="text-gray-600 hover:text-red-600 transition">À propos</a>
-                    <a href="/contact" class="text-gray-600 hover:text-red-600 transition">Contact</a>
+                    <a href="{{ route('welcome') }}"
+                        class="text-gray-600 hover:text-red-600 transition font-medium">Accueil</a>
+                    <a href="{{ route('about') }}" class="text-gray-600 hover:text-red-600 transition">À propos</a>
+                    <a href="{{ route('contact') }}" class="text-gray-600 hover:text-red-600 transition">Contact</a>
                     <div class="flex space-x-4">
                         <a href="{{ route('login') }}"
                             class="text-red-600 border border-red-600 px-6 py-2 rounded-full hover:bg-red-50 transition">
@@ -73,19 +71,17 @@
             </div>
         </div>
 
-        <!-- Menu Mobile Dropdown -->
         <div class="hidden md:hidden bg-white shadow-md" id="mobile-menu">
             <div class="container mx-auto px-6 py-4 flex flex-col space-y-4">
-                <a href="/" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
-                <a href="/about" class="text-gray-600 hover:text-red-600 transition">À propos</a>
-                <a href="/contact" class="text-gray-600 hover:text-red-600 transition">Contact</a>
+                <a href="{{ route('welcome') }}" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
+                <a href="{{ route('about') }}" class="text-gray-600 hover:text-red-600 transition">À propos</a>
+                <a href="{{ route('contact') }}" class="text-gray-600 hover:text-red-600 transition">Contact</a>
                 <a href="{{ route('login') }}" class="text-gray-600 hover:text-red-600 transition">Connexion</a>
                 <a href="{{ route('register') }}" class="text-gray-600 hover:text-red-600 transition">Inscription</a>
             </div>
         </div>
     </nav>
 
-    <!-- Section Héros -->
     <section class="pt-24 bg-gradient-to-br from-red-50 via-white to-red-100">
         <div class="container mx-auto px-6 py-16">
             <div class="flex flex-col md:flex-row items-center">
@@ -118,7 +114,6 @@
         </div>
     </section>
 
-    <!-- Fonctionnalités Principales -->
     <section id="services" class="py-16">
         <div class="container mx-auto px-6">
             <div class="text-center mb-12">
@@ -128,7 +123,6 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Carte 1 -->
                 <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition group">
                     <div class="text-red-600 text-3xl mb-4 group-hover:scale-110 transition-transform">
                         <i class="fas fa-search"></i>
@@ -141,7 +135,6 @@
                     </a>
                 </div>
 
-                <!-- Carte 2 -->
                 <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition group">
                     <div class="text-red-600 text-3xl mb-4 group-hover:scale-110 transition-transform">
                         <i class="fas fa-calendar-alt"></i>
@@ -154,7 +147,6 @@
                     </a>
                 </div>
 
-                <!-- Carte 3 -->
                 <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition group">
                     <div class="text-red-600 text-3xl mb-4 group-hover:scale-110 transition-transform">
                         <i class="fas fa-chart-line"></i>
@@ -170,67 +162,6 @@
         </div>
     </section>
 
-    <!-- Section Actualités -->
-    {{-- <section id="actualites" class="py-16 bg-gradient-to-tr from-gray-100 to-white">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-800">Actualités</h2>
-                <p class="text-gray-600 mt-2">Restez informé des dernières nouvelles</p>
-                <div class="w-20 h-1 bg-red-600 mx-auto mt-4"></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Actualité 1 -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-                    <img src="https://images.unsplash.com/photo-1579154204601-01588f351e67?q=80&w=1000&auto=format"
-                        alt="Journée mondiale du don de sang" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <span class="text-sm text-red-600 font-semibold">14 Juin 2025</span>
-                        <h3 class="text-xl font-bold mt-2 mb-3">Journée mondiale du don de sang</h3>
-                        <p class="text-gray-600">Participez à nos événements spéciaux organisés à travers le pays pour
-                            célébrer cette journée importante.</p>
-                        <a href="#" class="inline-block mt-4 text-red-600 hover:underline">Lire plus</a>
-                    </div>
-                </div>
-
-                <!-- Actualité 2 -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-                    <img src="https://images.unsplash.com/photo-1631815587646-b85a1bb027e1?q=80&w=1000&auto=format"
-                        alt="Besoin urgent de sang" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <span class="text-sm text-red-600 font-semibold">5 Avril 2025</span>
-                        <h3 class="text-xl font-bold mt-2 mb-3">Besoin urgent de sang type O-</h3>
-                        <p class="text-gray-600">Les réserves de sang de type O- sont au plus bas. Votre don est
-                            crucial pour les patients en attente.</p>
-                        <a href="#" class="inline-block mt-4 text-red-600 hover:underline">Lire plus</a>
-                    </div>
-                </div>
-
-                <!-- Actualité 3 -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-                    <img src="https://images.unsplash.com/photo-1579684453423-f84349ef60b0?q=80&w=1000&auto=format"
-                        alt="Nouvelle technologie" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <span class="text-sm text-red-600 font-semibold">20 Mars 2025</span>
-                        <h3 class="text-xl font-bold mt-2 mb-3">Nouvelles technologies dans le domaine du don du sang
-                        </h3>
-                        <p class="text-gray-600">Découvrez les avancées technologiques qui révolutionnent le processus
-                            de collecte et de stockage du sang.</p>
-                        <a href="#" class="inline-block mt-4 text-red-600 hover:underline">Lire plus</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center mt-10">
-                <a href="#"
-                    class="inline-block bg-red-600 text-white px-8 py-3 rounded-full hover:bg-red-700 transition shadow-md">
-                    Toutes les actualités
-                </a>
-            </div>
-        </div>
-    </section> --}}
-
-    <!-- Section Statistiques -->
     <section class="py-16 bg-red-600 text-white relative overflow-hidden">
         <div class="absolute top-0 left-0 w-full h-20 blood-wave opacity-10"></div>
         <div class="absolute bottom-0 left-0 w-full h-20 blood-wave opacity-10" style="transform: rotate(180deg);">
@@ -243,25 +174,21 @@
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <!-- Stat 1 -->
                 <div class="text-center stats-item">
                     <div class="text-4xl font-bold mb-2">12,580</div>
                     <div class="text-red-100">Donneurs actifs</div>
                 </div>
 
-                <!-- Stat 2 -->
                 <div class="text-center stats-item">
                     <div class="text-4xl font-bold mb-2">8,392</div>
                     <div class="text-red-100">Vies sauvées</div>
                 </div>
 
-                <!-- Stat 3 -->
                 <div class="text-center stats-item">
                     <div class="text-4xl font-bold mb-2">156</div>
                     <div class="text-red-100">Centres partenaires</div>
                 </div>
 
-                <!-- Stat 4 -->
                 <div class="text-center stats-item">
                     <div class="text-4xl font-bold mb-2">25,746</div>
                     <div class="text-red-100">Dons de sang</div>
@@ -270,371 +197,267 @@
         </div>
     </section>
 
-    <!-- Section Témoignages -->
-    <section class="py-16 bg-white">
+    <section class="py-16 bg-gradient-to-r from-red-50 to-white">
         <div class="container mx-auto px-6">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-800">Témoignages</h2>
-                <p class="text-gray-600 mt-2">Ce que disent nos donneurs et bénéficiaires</p>
+                <h2 class="text-3xl font-bold text-gray-800">Compatibilité des groupes sanguins</h2>
+                <p class="text-gray-600 mt-2">Comprendre qui peut recevoir votre don</p>
                 <div class="w-20 h-1 bg-red-600 mx-auto mt-4"></div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Témoignage 1 -->
-                <div class="bg-gray-50 p-8 rounded-lg shadow-sm">
-                    <div class="text-red-500 text-3xl mb-4">
-                        <i class="fas fa-quote-left"></i>
-                    </div>
-                    <p class="text-gray-600 italic mb-6">
-                        "Grâce aux donneurs de sang, j'ai pu surmonter ma leucémie. Vous ne savez pas à quel point votre
-                        geste est précieux pour des personnes comme moi."
-                    </p>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-gray-300 rounded-full overflow-hidden mr-4">
-                            <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Sophie Martin">
-                        </div>
-                        <div>
-                            <h4 class="font-semibold">Sophie Martin</h4>
-                            <p class="text-sm text-gray-500">Bénéficiaire</p>
-                        </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-semibold mb-6 text-gray-800">Tableau de compatibilité</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white">
+                            <thead>
+                                <tr>
+                                    <th
+                                        class="py-3 px-4 bg-red-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b">
+                                        Groupe sanguin
+                                    </th>
+                                    <th
+                                        class="py-3 px-4 bg-red-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-b">
+                                        Peut donner à
+                                    </th>
+                                    <th
+                                        class="py-3 px-4 bg-red-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-b">
+                                        Peut recevoir de
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center">
+                                            <span
+                                                class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold mr-3">A+</span>
+                                            <span class="font-medium text-gray-900">A positif</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4 text-center text-gray-700">A+, AB+</td>
+                                    <td class="py-4 px-4 text-center text-gray-700">A+, A-, O+, O-</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center">
+                                            <span
+                                                class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold mr-3">A-</span>
+                                            <span class="font-medium text-gray-900">A négatif</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4 text-center text-gray-700">A+, A-, AB+, AB-</td>
+                                    <td class="py-4 px-4 text-center text-gray-700">A-, O-</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center">
+                                            <span
+                                                class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold mr-3">B+</span>
+                                            <span class="font-medium text-gray-900">B positif</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4 text-center text-gray-700">B+, AB+</td>
+                                    <td class="py-4 px-4 text-center text-gray-700">B+, B-, O+, O-</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center">
+                                            <span
+                                                class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold mr-3">B-</span>
+                                            <span class="font-medium text-gray-900">B négatif</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4 text-center text-gray-700">B+, B-, AB+, AB-</td>
+                                    <td class="py-4 px-4 text-center text-gray-700">B-, O-</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center">
+                                            <span
+                                                class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold mr-3">AB+</span>
+                                            <span class="font-medium text-gray-900">AB positif</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4 text-center text-gray-700">AB+ seulement</td>
+                                    <td class="py-4 px-4 text-center text-gray-700">Tous les groupes</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center">
+                                            <span
+                                                class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold mr-3">AB-</span>
+                                            <span class="font-medium text-gray-900">AB négatif</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4 text-center text-gray-700">AB+, AB-</td>
+                                    <td class="py-4 px-4 text-center text-gray-700">A-, B-, AB-, O-</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center">
+                                            <span
+                                                class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold mr-3">O+</span>
+                                            <span class="font-medium text-gray-900">O positif</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4 text-center text-gray-700">A+, B+, AB+, O+</td>
+                                    <td class="py-4 px-4 text-center text-gray-700">O+, O-</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center">
+                                            <span
+                                                class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold mr-3">O-</span>
+                                            <span class="font-medium text-gray-900">O négatif</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4 text-center text-gray-700">Tous les groupes</td>
+                                    <td class="py-4 px-4 text-center text-gray-700">O- seulement</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-                <!-- Témoignage 2 -->
-                <div class="bg-gray-50 p-8 rounded-lg shadow-sm">
-                    <div class="text-red-500 text-3xl mb-4">
-                        <i class="fas fa-quote-left"></i>
+                <div class="flex flex-col justify-between">
+                    <div class="bg-white p-6 rounded-xl shadow-lg mb-6">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Le saviez-vous ?</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <div
+                                    class="flex-shrink-0 h-5 w-5 rounded-full bg-red-100 flex items-center justify-center mr-3 mt-0.5">
+                                    <i class="fas fa-tint text-red-600 text-xs"></i>
+                                </div>
+                                <p class="text-gray-700">Le groupe O négatif est considéré comme le "donneur universel"
+                                    car il peut être transfusé à n'importe quel patient.</p>
+                            </li>
+                            <li class="flex items-start">
+                                <div
+                                    class="flex-shrink-0 h-5 w-5 rounded-full bg-red-100 flex items-center justify-center mr-3 mt-0.5">
+                                    <i class="fas fa-tint text-red-600 text-xs"></i>
+                                </div>
+                                <p class="text-gray-700">Le groupe AB+ est le "receveur universel" et peut recevoir du
+                                    sang de tous les autres groupes.</p>
+                            </li>
+                            <li class="flex items-start">
+                                <div
+                                    class="flex-shrink-0 h-5 w-5 rounded-full bg-red-100 flex items-center justify-center mr-3 mt-0.5">
+                                    <i class="fas fa-tint text-red-600 text-xs"></i>
+                                </div>
+                                <p class="text-gray-700">Seulement 7% de la population a un groupe sanguin O négatif,
+                                    pourtant il est utilisé dans les situations d'urgence.</p>
+                            </li>
+                        </ul>
                     </div>
-                    <p class="text-gray-600 italic mb-6">
-                        "Je donne mon sang régulièrement depuis 5 ans. C'est un petit geste qui prend peu de temps mais
-                        qui a un impact énorme sur la vie des autres."
-                    </p>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-gray-300 rounded-full overflow-hidden mr-4">
-                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Thomas Dubois">
-                        </div>
-                        <div>
-                            <h4 class="font-semibold">Thomas Dubois</h4>
-                            <p class="text-sm text-gray-500">Donneur régulier</p>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Témoignage 3 -->
-                <div class="bg-gray-50 p-8 rounded-lg shadow-sm">
-                    <div class="text-red-500 text-3xl mb-4">
-                        <i class="fas fa-quote-left"></i>
-                    </div>
-                    <p class="text-gray-600 italic mb-6">
-                        "En tant que médecin urgentiste, je vois chaque jour l'importance des dons de sang. Les donneurs
-                        sont des héros anonymes qui sauvent des vies."
-                    </p>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-gray-300 rounded-full overflow-hidden mr-4">
-                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Dr. Sarah Benali">
-                        </div>
-                        <div>
-                            <h4 class="font-semibold">Dr. Sarah Benali</h4>
-                            <p class="text-sm text-gray-500">Médecin urgentiste</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section Newsletter -->
-    {{-- <section class="py-16 bg-gray-50">
-        <div class="container mx-auto px-6">
-            <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
-                <div class="flex flex-col md:flex-row">
-                    <div class="md:w-1/3 bg-red-600 text-white p-8 flex items-center justify-center">
-                        <div class="text-center">
-                            <div class="text-5xl mb-4">
-                                <i class="far fa-envelope"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold mb-2">Restez informé</h3>
-                            <p class="text-red-100">Recevez nos actualités</p>
-                        </div>
-                    </div>
-                    <div class="md:w-2/3 p-8">
-                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Inscrivez-vous à notre newsletter</h3>
-                        <p class="text-gray-600 mb-6">
-                            Recevez des informations sur les campagnes de don, les besoins urgents et les actualités
-                            importantes.
-                        </p>
-                        <form class="flex flex-col sm:flex-row gap-4">
-                            <input type="email" placeholder="Votre adresse email"
-                                class="flex-grow px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-600">
-                            <button type="submit"
-                                class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition whitespace-nowrap">
-                                S'abonner
-                            </button>
-                        </form>
-                        <p class="text-xs text-gray-500 mt-4">
-                            En vous inscrivant, vous acceptez notre politique de confidentialité. Vous pourrez vous
-                            désabonner à tout moment.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> --}}
-
-    <!-- Section Partenaires -->
-    <section class="py-16">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-800">Nos partenaires</h2>
-                <p class="text-gray-600 mt-2">Ils nous font confiance et nous soutiennent</p>
-                <div class="w-20 h-1 bg-red-600 mx-auto mt-4"></div>
-            </div>
-
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 items-center">
-                <div class="flex items-center justify-center grayscale hover:grayscale-0 transition">
-                    <img src="https://placehold.co/150x80?text=Partenaire+1" alt="Partenaire 1" class="max-h-16">
-                </div>
-                <div class="flex items-center justify-center grayscale hover:grayscale-0 transition">
-                    <img src="https://placehold.co/150x80?text=Partenaire+2" alt="Partenaire 2" class="max-h-16">
-                </div>
-                <div class="flex items-center justify-center grayscale hover:grayscale-0 transition">
-                    <img src="https://placehold.co/150x80?text=Partenaire+3" alt="Partenaire 3" class="max-h-16">
-                </div>
-                <div class="flex items-center justify-center grayscale hover:grayscale-0 transition">
-                    <img src="https://placehold.co/150x80?text=Partenaire+4" alt="Partenaire 4" class="max-h-16">
-                </div>
-                <div class="flex items-center justify-center grayscale hover:grayscale-0 transition">
-                    <img src="https://placehold.co/150x80?text=Partenaire+5" alt="Partenaire 5" class="max-h-16">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {{-- <!-- Find Center -->
-    <section id="find-center" class="py-16 bg-gradient-to-br from-red-50 to-white relative overflow-hidden">
-        <!-- Decorative blood drops -->
-        <div class="absolute top-10 left-10 w-16 h-16 bg-red-100 rounded-full opacity-50"></div>
-        <div class="absolute bottom-20 right-20 w-24 h-24 bg-red-100 rounded-full opacity-50"></div>
-        <div class="absolute top-40 right-40 w-12 h-12 bg-red-100 rounded-full opacity-30"></div>
-        
-        <div class="container mx-auto px-6">
-            <div class="max-w-4xl mx-auto">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold text-gray-800">Trouvez où donner</h2>
-                    <p class="text-gray-600 mt-2">Votre don est précieux, trouvez le centre qui vous attend</p>
-                    <div class="w-20 h-1 bg-red-600 mx-auto mt-4"></div>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-xl p-6 md:p-8 backdrop-blur-sm bg-opacity-80">
-                    <!-- Search bar -->
-                    <div class="mb-6">
-                        <div class="flex items-center p-2 bg-gray-50 rounded-full shadow-inner">
-                            <i class="fas fa-search text-gray-400 mx-3"></i>
-                            <input type="text" placeholder="Entrez votre adresse ou code postal" class="bg-transparent border-none w-full focus:outline-none py-2">
-                            <button class="bg-red-600 text-white px-6 py-2 rounded-full hover:bg-red-700 transition transform hover:scale-105 ml-2 flex-shrink-0">
-                                Rechercher
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="flex flex-col md:flex-row gap-8">
-                        <div class="md:w-1/2">
-                            <div class="flex items-center justify-between mb-4">
-                                <h3 class="text-xl font-semibold">Centres à proximité</h3>
-                                <div class="flex items-center text-sm text-gray-600">
-                                    <span class="mr-2">Trier par:</span>
-                                    <select class="text-sm border-b border-gray-300 focus:outline-none focus:border-red-600 bg-transparent">
-                                        <option>Distance</option>
-                                        <option>Disponibilité</option>
-                                        <option>Horaires</option>
-                                    </select>
+                    <div class="bg-gradient-to-r from-red-600 to-red-700 p-6 rounded-xl shadow-lg text-white">
+                        <h3 class="text-xl font-semibold mb-4">Demande actuelle</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-white bg-opacity-20 p-4 rounded-lg">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-bold">O-</span>
+                                    <span class="text-sm">Critique</span>
+                                </div>
+                                <div class="w-full bg-white bg-opacity-30 rounded-full h-2.5">
+                                    <div class="bg-white h-2.5 rounded-full" style="width: 15%"></div>
                                 </div>
                             </div>
-                            
-                            <div class="space-y-4 max-h-96 overflow-y-auto pr-2 styled-scrollbar">
-                                <!-- Centre 1 -->
-                                <div class="border border-gray-200 rounded-lg p-4 hover:bg-red-50 transition cursor-pointer transform hover:-translate-y-1 hover:shadow-md">
-                                    <div class="flex justify-between">
-                                        <h4 class="font-semibold text-red-600">Centre Hospitalier Universitaire</h4>
-                                        <span class="text-sm bg-green-100 text-green-800 px-2 py-1 rounded-full flex items-center">
-                                            <span class="w-2 h-2 bg-green-500 rounded-full mr-1"></span> Ouvert
-                                        </span>
-                                    </div>
-                                    <p class="text-sm text-gray-600 mt-1"><i class="fas fa-map-marker-alt mr-1 text-red-400"></i> 123 Avenue de la République, Paris</p>
-                                    <div class="flex justify-between items-center mt-3">
-                                        <div class="flex items-center">
-                                            <i class="far fa-clock text-gray-400 mr-1"></i>
-                                            <span class="text-xs text-gray-500">9h - 18h</span>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <span class="text-sm text-red-600 font-medium mr-2">2.3 km</span>
-                                            <i class="fas fa-chevron-right text-gray-400"></i>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3 flex items-center text-sm text-red-500">
-                                        <i class="fas fa-tint mr-1"></i> 
-                                        <span>Besoin urgent: A+ et O-</span>
-                                    </div>
+                            <div class="bg-white bg-opacity-20 p-4 rounded-lg">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-bold">A+</span>
+                                    <span class="text-sm">Modérée</span>
                                 </div>
-                                
-                                <!-- Centre 2 -->
-                                <div class="border border-gray-200 rounded-lg p-4 hover:bg-red-50 transition cursor-pointer transform hover:-translate-y-1 hover:shadow-md">
-                                    <div class="flex justify-between">
-                                        <h4 class="font-semibold text-red-600">Clinique Saint Michel</h4>
-                                        <span class="text-sm bg-green-100 text-green-800 px-2 py-1 rounded-full flex items-center">
-                                            <span class="w-2 h-2 bg-green-500 rounded-full mr-1"></span> Ouvert
-                                        </span>
-                                    </div>
-                                    <p class="text-sm text-gray-600 mt-1"><i class="fas fa-map-marker-alt mr-1 text-red-400"></i> 45 Rue des Lilas, Paris</p>
-                                    <div class="flex justify-between items-center mt-3">
-                                        <div class="flex items-center">
-                                            <i class="far fa-clock text-gray-400 mr-1"></i>
-                                            <span class="text-xs text-gray-500">8h - 19h30</span>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <span class="text-sm text-red-600 font-medium mr-2">3.7 km</span>
-                                            <i class="fas fa-chevron-right text-gray-400"></i>
-                                        </div>
-                                    </div>
-                                    <div class="mt-3 text-sm text-gray-500">
-                                        <span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full text-xs">Parking gratuit</span>
-                                        <span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full text-xs ml-1">Sans RDV</span>
-                                    </div>
+                                <div class="w-full bg-white bg-opacity-30 rounded-full h-2.5">
+                                    <div class="bg-white h-2.5 rounded-full" style="width: 45%"></div>
                                 </div>
                             </div>
-                            
-                            <a href="#" class="mt-4 text-red-600 hover:text-red-700 inline-flex items-center font-medium group">
-                                Voir tous les centres 
-                                <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition"></i>
+                            <div class="bg-white bg-opacity-20 p-4 rounded-lg">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-bold">B-</span>
+                                    <span class="text-sm">Faible</span>
+                                </div>
+                                <div class="w-full bg-white bg-opacity-30 rounded-full h-2.5">
+                                    <div class="bg-white h-2.5 rounded-full" style="width: 25%"></div>
+                                </div>
+                            </div>
+                            <div class="bg-white bg-opacity-20 p-4 rounded-lg">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-bold">AB+</span>
+                                    <span class="text-sm">Stable</span>
+                                </div>
+                                <div class="w-full bg-white bg-opacity-30 rounded-full h-2.5">
+                                    <div class="bg-white h-2.5 rounded-full" style="width: 75%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-5">
+                            <a href="{{ route('register') }}?role=donor"
+                                class="inline-flex items-center justify-center w-full px-5 py-3 mt-3 bg-white text-red-600 font-medium rounded-lg hover:bg-gray-100 transition-colors duration-300">
+                                <i class="fas fa-heart mr-2"></i> Donner maintenant
                             </a>
                         </div>
-                        
-                        <div class="md:w-1/2">
-                            <div class="relative h-96 rounded-lg overflow-hidden bg-gray-100 shadow-md border border-gray-200">
-                                <!-- Interactive map placeholder -->
-                                <div class="absolute inset-0 flex flex-col items-center justify-center bg-gray-50">
-                                    <div class="relative w-full h-full">
-                                        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-gray-100"></div>
-                                        <img src="https://api.mapbox.com/styles/v1/mapbox/light-v10/static/2.3488,48.8534,12,0/600x400?access_token=pk.placeholder" 
-                                             alt="Carte des centres" class="w-full h-full object-cover opacity-90">
-                                        
-                                        <!-- Map pins -->
-                                        <div class="absolute top-1/3 left-1/3 transform -translate-x-1/2 -translate-y-1/2">
-                                            <div class="animate-pulse">
-                                                <div class="w-4 h-4 bg-red-600 rounded-full"></div>
-                                                <div class="w-4 h-4 bg-red-600 rounded-full animate-ping absolute inset-0 opacity-75"></div>
-                                            </div>
-                                        </div>
-                                        <div class="absolute top-1/2 left-2/3 transform -translate-x-1/2 -translate-y-1/2">
-                                            <div class="w-4 h-4 bg-red-600 rounded-full"></div>
-                                        </div>
-                                        <div class="absolute top-2/3 left-1/5 transform -translate-x-1/2 -translate-y-1/2">
-                                            <div class="w-4 h-4 bg-red-600 rounded-full"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="absolute bottom-0 left-0 right-0 bg-white bg-opacity-95 p-4">
-                                    <div class="flex items-center justify-between">
-                                        <div>
-                                            <p class="text-sm font-medium">Utilisez votre localisation</p>
-                                            <p class="text-xs text-gray-500">Pour trouver les centres les plus proches</p>
-                                        </div>
-                                        <button class="bg-red-600 text-white px-4 py-2 rounded-full text-sm hover:bg-red-700 transform hover:scale-105 transition flex items-center">
-                                            <i class="fas fa-location-arrow mr-1"></i> Me localiser
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Blood type selector -->
-                            <div class="mt-4 p-3 bg-red-50 rounded-lg">
-                                <p class="text-sm font-medium text-red-800 mb-2">Filtrer par groupe sanguin demandé:</p>
-                                <div class="flex flex-wrap gap-2">
-                                    <button class="px-3 py-1 bg-white border border-red-200 rounded-full text-sm hover:bg-red-600 hover:text-white transition">A+</button>
-                                    <button class="px-3 py-1 bg-white border border-red-200 rounded-full text-sm hover:bg-red-600 hover:text-white transition">A-</button>
-                                    <button class="px-3 py-1 bg-white border border-red-200 rounded-full text-sm hover:bg-red-600 hover:text-white transition">B+</button>
-                                    <button class="px-3 py-1 bg-white border border-red-200 rounded-full text-sm hover:bg-red-600 hover:text-white transition">B-</button>
-                                    <button class="px-3 py-1 bg-white border border-red-200 rounded-full text-sm hover:bg-red-600 hover:text-white transition">AB+</button>
-                                    <button class="px-3 py-1 bg-white border border-red-200 rounded-full text-sm hover:bg-red-600 hover:text-white transition">AB-</button>
-                                    <button class="px-3 py-1 bg-white border border-red-200 rounded-full text-sm hover:bg-red-600 hover:text-white transition">O+</button>
-                                    <button class="px-3 py-1 bg-red-600 text-white border border-red-600 rounded-full text-sm">O-</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Call to action -->
-                    <div class="mt-8 bg-gradient-to-r from-red-500 to-red-600 rounded-lg p-4 text-white text-center">
-                        <div class="flex items-center justify-center">
-                            <div class="mr-3">
-                                <i class="fas fa-calendar-alt text-2xl"></i>
-                            </div>
-                            <div class="text-left">
-                                <h4 class="font-bold">Pas le temps aujourd'hui?</h4>
-                                <p class="text-sm text-red-100">Planifiez votre prochain don et recevez un rappel</p>
-                            </div>
-                            <button class="ml-auto bg-white text-red-600 px-4 py-2 rounded-full font-medium hover:bg-red-100 transition">
-                                Planifier
-                            </button>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <style>
-        .styled-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-        .styled-scrollbar::-webkit-scrollbar-thumb {
-            background-color: rgba(239, 68, 68, 0.5);
-            border-radius: 3px;
-        }
-        .styled-scrollbar::-webkit-scrollbar-track {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
-        </style>
-    </section> --}}
+    </section>
 
-    <!-- Pied de Page -->
     <footer class="bg-gray-800 text-white py-12">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <h3 class="text-xl font-semibold mb-4">DonSang</h3>
+                    <h3 class="text-xl font-semibold mb-4">BloodBank</h3>
                     <p class="text-gray-400">Ensemble, sauvons des vies</p>
                 </div>
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Liens utiles</h4>
                     <ul class="space-y-2">
-                        <li><a href="about.html" class="text-gray-400 hover:text-white">À propos</a></li>
-                        <li><a href="contact.html" class="text-gray-400 hover:text-white">Contact</a></li>
+                        <li><a href="{{ route('about') }}" class="text-gray-400 hover:text-white">À propos</a></li>
+                        <li><a href="{{ route('contact') }}" class="text-gray-400 hover:text-white">Contact</a></li>
                     </ul>
                 </div>
-                // ... (reste du footer) ...
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Légal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="{{ route('legal') }}" class="text-gray-400 hover:text-white">Mentions
+                                légales</a></li>
+                        <li><a href="{{ route('privacy') }}"
+                                class="text-gray-400 hover:text-white">Confidentialité</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Suivez-nous</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
 
-    {{-- <script>
-        // Menu mobile
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.querySelector('.md\\:flex');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
 
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
 
-        // Animation au défilement
-        ScrollReveal().reveal('.container', {
-            delay: 200,
-            distance: '20px',
-            origin: 'bottom',
-            duration: 1000,
-            easing: 'ease-in-out'
+            ScrollReveal().reveal('.container', {
+                delay: 200,
+                distance: '20px',
+                origin: 'bottom',
+                duration: 1000,
+                easing: 'ease-in-out'
+            });
         });
-    </script> --}}
+    </script>
 </body>
 
 </html>

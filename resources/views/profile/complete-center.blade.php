@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DonSang - Complétez votre profil</title>
+    <title>BloodBank - Complétez votre profil</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://unpkg.com/scrollreveal"></script>
@@ -53,7 +53,7 @@
         <div class="container mx-auto px-6 py-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <a href="/" class="text-red-600 text-2xl font-bold">DonSang</a>
+                    <a href="/" class="text-red-600 text-2xl font-bold">BloodBank</a>
                 </div>
 
                 <!-- Menu Mobile -->
@@ -218,9 +218,17 @@
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <i class="fas fa-clock text-gray-400"></i>
                                     </div>
-                                    <input type="time" id="opening_time" name="opening_time"
-                                        value="{{ old('opening_time') }}"
+                                    <select id="opening_time" name="opening_time"
                                         class="w-full pl-10 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent @error('opening_time') border-red-500 @enderror">
+                                        <option value="" disabled {{ old('opening_time') ? '' : 'selected' }}>
+                                            Heure d'ouverture</option>
+                                        @for ($i = 0; $i < 24; $i++)
+                                            <option value="{{ sprintf('%02d:00', $i) }}"
+                                                {{ old('opening_time') == sprintf('%02d:00', $i) ? 'selected' : '' }}>
+                                                {{ sprintf('%02d:00', $i) }}
+                                            </option>
+                                        @endfor
+                                    </select>
                                     <label for="opening_time" class="block text-xs text-gray-500 mt-1 ml-1">Heure
                                         d'ouverture</label>
                                 </div>
@@ -228,9 +236,17 @@
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <i class="fas fa-clock text-gray-400"></i>
                                     </div>
-                                    <input type="time" id="closing_time" name="closing_time"
-                                        value="{{ old('closing_time') }}"
+                                    <select id="closing_time" name="closing_time"
                                         class="w-full pl-10 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent @error('closing_time') border-red-500 @enderror">
+                                        <option value="" disabled {{ old('closing_time') ? '' : 'selected' }}>
+                                            Heure de fermeture</option>
+                                        @for ($i = 0; $i < 24; $i++)
+                                            <option value="{{ sprintf('%02d:00', $i) }}"
+                                                {{ old('closing_time') == sprintf('%02d:00', $i) ? 'selected' : '' }}>
+                                                {{ sprintf('%02d:00', $i) }}
+                                            </option>
+                                        @endfor
+                                    </select>
                                     <label for="closing_time" class="block text-xs text-gray-500 mt-1 ml-1">Heure de
                                         fermeture</label>
                                 </div>
@@ -239,6 +255,58 @@
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                             @error('closing_time')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Available Days -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Jours d'ouverture</label>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-1">
+                                @php
+                                    $days = [
+                                        'Monday' => 'Lundi',
+                                        'Tuesday' => 'Mardi',
+                                        'Wednesday' => 'Mercredi',
+                                        'Thursday' => 'Jeudi',
+                                        'Friday' => 'Vendredi',
+                                        'Saturday' => 'Samedi',
+                                        'Sunday' => 'Dimanche',
+                                    ];
+                                @endphp
+
+                                @foreach ($days as $value => $label)
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="day_{{ $value }}" name="available_days[]"
+                                            value="{{ $value }}"
+                                            class="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
+                                            {{ is_array(old('available_days')) && in_array($value, old('available_days')) ? 'checked' : '' }}>
+                                        <label for="day_{{ $value }}"
+                                            class="ml-2 text-sm text-gray-700">{{ $label }}</label>
+                                    </div>
+                                @endforeach
+                            </div>
+                            @error('available_days')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Hourly Rate -->
+                        <div>
+                            <label for="hourly_rate" class="block text-sm font-medium text-gray-700 mb-2">Capacité
+                                horaire</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-user-clock text-gray-400"></i>
+                                </div>
+                                <input type="number" id="hourly_rate" name="hourly_rate" min="1"
+                                    max="100" value="{{ old('hourly_rate', 1) }}"
+                                    class="w-full pl-10 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent @error('hourly_rate') border-red-500 @enderror"
+                                    placeholder="Nombre de donneurs par heure">
+                                <div class="text-xs text-gray-500 mt-1 ml-1">Nombre maximum de donneurs pouvant être
+                                    accueillis par heure</div>
+                            </div>
+                            @error('hourly_rate')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
@@ -294,7 +362,7 @@
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <h3 class="text-xl font-semibold mb-4">DonSang</h3>
+                    <h3 class="text-xl font-semibold mb-4">BloodBank</h3>
                     <p class="text-gray-400">Ensemble, sauvons des vies</p>
                 </div>
                 <div>

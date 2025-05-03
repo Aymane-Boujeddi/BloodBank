@@ -28,7 +28,32 @@ class CheckRole
             return $next($request);
         }
 
-        return redirect('/login')->with('error', 'You do not have permission to access this page.');
+        return $this->redirectBasedOnRole($user->role);
+    }
+
+    /**
+     * Redirect the user based on their role.
+     * 
+     * @param string $role
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private function redirectBasedOnRole($role)
+    {
+        $message = 'Vous n\'avez pas l\'autorisation d\'accéder à cette page.';
+        
+        switch ($role) {
+            case 'admin':
+                return redirect()->route('admin.dashboard')->with('error', $message);
+            
+            case 'donor':
+                return redirect()->route('donor.dashboard')->with('error', $message);
+            
+            case 'donation_centre':
+                return redirect()->route('donationCenter.dashboard')->with('error', $message);
+                
+            default:
+                return redirect('/')->with('error', $message);
+        }
     }
 }
 

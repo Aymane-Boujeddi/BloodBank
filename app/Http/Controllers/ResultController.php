@@ -7,95 +7,138 @@ use App\Models\Donation;
 use App\Models\DonationCenter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
 
 class ResultController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        // Method logic removed
+        $donationCenter = Auth::user()->donationCenter;
+
+        $donations = Donation::where('donation_center_id', $donationCenter->id)
+            ->with(['donor.user', 'result'])
+            ->orderBy('donation_date', 'desc')
+            ->paginate(10);
+
+        return view('donationCenter.results', compact('donations', 'donationCenter'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create(Request $request)
     {
-        // Method logic removed
+        $donation = Donation::findOrFail($request->donation_id);
+        return view('donationCenter.results.create', compact('donation'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        // Method logic removed
+        $request->validate([
+            'donation_id' => 'required|exists:donations,id',
+            'blood_type_id' => 'required|string|exists:blood_types,id',
+            'hemoglobin' => 'nullable|numeric',
+            'blood_pressure' => 'nullable|string',
+            'pulse' => 'nullable|numeric',
+            'amount' => 'required|integer|min:100|max:1000',
+            'has_medical_issues' => 'boolean',
+            'medical_notes' => 'nullable|string',
+            'next_eligible_donation_date' => 'nullable|date',
+        ]);
+
+        $existingResult = Result::where('donation_id', $request->donation_id)->first();
+
+        if ($existingResult) {
+            return redirect()->back()->with('error', 'Un résultat existe déjà pour ce don.');
+        }
+
+        $result = new Result();
+        $result->donation_id = $request->donation_id;
+        $result->blood_type = $request->blood_type;
+        $result->hemoglobin = $request->hemoglobin;
+        $result->blood_pressure = $request->blood_pressure;
+        $result->pulse = $request->pulse;
+        $result->amount = $request->amount;
+        $result->has_medical_issues = $request->has_medical_issues ?? false;
+        $result->medical_notes = $request->medical_notes;
+        $result->next_eligible_donation_date = $request->next_eligible_donation_date;
+        $result->save();
+
+        return redirect()->route('donationCenter.centerResultsPage')->with('success', 'Résultat ajouté avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Result $result)
     {
-        // Method logic removed
+        $donationCenter = Auth::user()->donationCenter;
+        if ($result->donation->donation_center_id !== $donationCenter->id) {
+            abort(403, 'Vous n\'avez pas la permission de voir ce résultat.');
+        }
+
+        return view('donationCenter.results.show', compact('result'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Result $result)
+    public function edit()
     {
-        // Method logic removed
+      
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Result $result)
     {
-        // Method logic removed
+        $donationCenter = Auth::user()->donationCenter;
+        if ($result->donation->donation_center_id !== $donationCenter->id) {
+            abort(403, 'Vous n\'avez pas la permission de modifier ce résultat.');
+        }
+
+        $request->validate([
+            'blood_type' => 'nullable|string',
+            'hemoglobin' => 'nullable|numeric',
+            'blood_pressure' => 'nullable|string',
+            'pulse' => 'nullable|numeric',
+            'amount' => 'required|integer|min:100|max:1000',
+            'has_medical_issues' => 'boolean',
+            'medical_notes' => 'nullable|string',
+            'next_eligible_donation_date' => 'nullable|date',
+        ]);
+
+        $result->blood_type = $request->blood_type;
+        $result->hemoglobin = $request->hemoglobin;
+        $result->blood_pressure = $request->blood_pressure;
+        $result->pulse = $request->pulse;
+        $result->amount = $request->amount;
+        $result->has_medical_issues = $request->has_medical_issues ?? false;
+        $result->medical_notes = $request->medical_notes;
+        $result->next_eligible_donation_date = $request->next_eligible_donation_date;
+        $result->save();
+
+        return redirect()->back()->with('success', 'Résultat mis à jour avec succès.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Result $result)
     {
-        // Method logic removed
+        $donationCenter = Auth::user()->donationCenter;
+        if ($result->donation->donation_center_id !== $donationCenter->id) {
+            abort(403, 'Vous n\'avez pas la permission de supprimer ce résultat.');
+        }
+
+        $result->delete();
+
+        return redirect()->back()->with('success', 'Résultat supprimé avec succès.');
     }
 
-    /**
-     * Publish results to donor
-     */
-    public function publish(Result $result)
-    {
-        // Method logic removed
-    }
-
-    /**
-     * Generate and download donor certificate
-     */
-    public function downloadCertificate(Result $result)
-    {
-        // Method logic removed
-    }
-
-    /**
-     * Get donor's result history
-     */
     public function donorResults()
     {
-        // Method logic removed
+        $donor = Auth::user()->donor;
+
+        $results = Result::whereHas('donation', function ($query) use ($donor) {
+            $query->where('donor_id', $donor->id);
+        })
+            ->with(['donation.donationCenter'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('donor.results', compact('results'));
     }
 
-    /**
-     * Helper function to check if a column exists in a table
-     */
     private function schema_has_column($table, $column)
     {
-        // Method logic removed
+        return Schema::hasColumn($table, $column);
     }
 }

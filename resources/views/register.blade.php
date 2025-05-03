@@ -4,33 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DonSang - Inscription</title>
+    <title>BloodBank - Inscription</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://unpkg.com/scrollreveal"></script>
 </head>
 
 <body class="font-sans">
-    <!-- Barre de Navigation -->
     <nav class="fixed w-full bg-white shadow-md z-50">
         <div class="container mx-auto px-6 py-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <a href="/" class="text-red-600 text-2xl font-bold">DonSang</a>
+                    <a href="{{ route('welcome') }}" class="text-red-600 text-2xl font-bold">BloodBank</a>
                 </div>
 
-                <!-- Menu Mobile -->
                 <div class="md:hidden">
                     <button id="mobile-menu-button" class="text-gray-500 hover:text-gray-600">
                         <i class="fas fa-bars text-2xl"></i>
                     </button>
                 </div>
 
-                <!-- Menu Desktop -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="/" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
-                    <a href="/about" class="text-gray-600 hover:text-red-600 transition">À propos</a>
-                    <a href="/contact" class="text-gray-600 hover:text-red-600 transition">Contact</a>
+                    <a href="{{ route('welcome') }}" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
+                    <a href="{{ route('about') }}" class="text-gray-600 hover:text-red-600 transition">À propos</a>
+                    <a href="{{ route('contact') }}" class="text-gray-600 hover:text-red-600 transition">Contact</a>
                     <div class="flex space-x-4">
                         <a href="{{ route('login') }}"
                             class="bg-red-600 text-white px-6 py-2 rounded-full hover:bg-red-700 transition">
@@ -43,12 +40,11 @@
                     </div>
                 </div>
 
-                <!-- Menu Mobile Content -->
                 <div class="hidden md:hidden absolute top-full left-0 right-0 bg-white shadow-md p-6" id="mobile-menu">
                     <div class="flex flex-col space-y-4">
-                        <a href="/" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
-                        <a href="/about" class="text-gray-600 hover:text-red-600 transition">À propos</a>
-                        <a href="/contact" class="text-gray-600 hover:text-red-600 transition">Contact</a>
+                        <a href="{{ route('welcome') }}" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
+                        <a href="{{ route('about') }}" class="text-gray-600 hover:text-red-600 transition">À propos</a>
+                        <a href="{{ route('contact') }}" class="text-gray-600 hover:text-red-600 transition">Contact</a>
                         <a href="{{ route('login') }}" class="text-gray-600 hover:text-red-600 transition">Connexion</a>
                         <a href="{{ route('register') }}"
                             class="text-gray-600 hover:text-red-600 transition">Inscription</a>
@@ -58,11 +54,9 @@
         </div>
     </nav>
 
-    <!-- Registration Section -->
     <section class="min-h-screen pt-24 pb-12 bg-gradient-to-br from-red-50 via-red-100 to-white flex items-center">
         <div class="container mx-auto px-6 my-8">
             <div class="max-w-2xl mx-auto">
-                <!-- Logo et Titre -->
                 <div class="text-center mb-8">
                     <div class="inline-block p-4 bg-red-100 rounded-full mb-4">
                         <i class="fas fa-heart text-red-600 text-4xl"></i>
@@ -71,12 +65,10 @@
                     <p class="text-gray-600 mt-2">Rejoignez la communauté des donneurs et sauvez des vies</p>
                 </div>
 
-                <!-- Formulaire d'Inscription -->
                 <div class="bg-white rounded-xl shadow-lg p-8">
                     <form action="{{ route('register') }}" method="POST" class="space-y-6">
                         @csrf
 
-                        <!-- Nom -->
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Nom
                                 complet</label>
@@ -93,7 +85,6 @@
                             @enderror
                         </div>
 
-                        <!-- Email -->
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
                             <div class="relative">
@@ -109,7 +100,6 @@
                             @enderror
                         </div>
 
-                        <!-- Type d'utilisateur (improved design) -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Je suis un...</label>
                             <div class="grid grid-cols-2 gap-3">
@@ -140,7 +130,6 @@
                             @enderror
                         </div>
 
-                        <!-- Ville -->
                         <div>
                             <label for="city_id" class="block text-sm font-medium text-gray-700 mb-2">Ville</label>
                             <div class="relative">
@@ -167,7 +156,6 @@
                             @enderror
                         </div>
 
-                        <!-- Mot de passe -->
                         <div>
                             <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Mot de
                                 passe</label>
@@ -184,7 +172,6 @@
                             @enderror
                         </div>
 
-                        <!-- Confirmer mot de passe -->
                         <div>
                             <label for="password_confirmation"
                                 class="block text-sm font-medium text-gray-700 mb-2">Confirmer le mot de passe</label>
@@ -198,7 +185,6 @@
                             </div>
                         </div>
 
-                        <!-- Options -->
                         <div class="flex items-center">
                             <input type="checkbox" id="terms" name="terms"
                                 class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
@@ -207,21 +193,18 @@
                                     d'utilisation</a></label>
                         </div>
 
-                        <!-- Notification about step 2 -->
                         <div class="bg-blue-50 text-blue-700 p-3 rounded-md text-sm">
                             <i class="fas fa-info-circle mr-2"></i>
                             Après votre inscription, vous pourrez compléter votre profil avec des informations
                             supplémentaires.
                         </div>
 
-                        <!-- Bouton de connexion -->
                         <button type="submit"
                             class="w-full bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition transform hover:scale-105">
                             Créer mon compte
                         </button>
                     </form>
 
-                    <!-- Lien d'inscription -->
                     <p class="text-center mt-6 text-gray-600">
                         Déjà un compte ?
                         <a href="{{ route('login') }}" class="text-red-600 hover:text-red-700 font-semibold">Se
@@ -232,26 +215,27 @@
         </div>
     </section>
 
-    <!-- Pied de Page -->
     <footer class="bg-gray-800 text-white py-12">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <h3 class="text-xl font-semibold mb-4">DonSang</h3>
+                    <h3 class="text-xl font-semibold mb-4">BloodBank</h3>
                     <p class="text-gray-400">Ensemble, sauvons des vies</p>
                 </div>
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Liens utiles</h4>
                     <ul class="space-y-2">
-                        <li><a href="/about" class="text-gray-400 hover:text-white">À propos</a></li>
-                        <li><a href="/contact" class="text-gray-400 hover:text-white">Contact</a></li>
+                        <li><a href="{{ route('about') }}" class="text-gray-400 hover:text-white">À propos</a></li>
+                        <li><a href="{{ route('contact') }}" class="text-gray-400 hover:text-white">Contact</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Légal</h4>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white">Mentions légales</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Confidentialité</a></li>
+                        <li><a href="{{ route('legal') }}" class="text-gray-400 hover:text-white">Mentions
+                                légales</a></li>
+                        <li><a href="{{ route('privacy') }}"
+                                class="text-gray-400 hover:text-white">Confidentialité</a></li>
                     </ul>
                 </div>
                 <div>
@@ -267,9 +251,7 @@
     </footer>
 
     <script>
-        // Menu mobile
         document.addEventListener('DOMContentLoaded', function() {
-            // Mobile menu toggle
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
 
@@ -279,7 +261,6 @@
                     mobileMenu.classList.toggle('hidden');
                 });
 
-                // Close mobile menu when clicking outside
                 document.addEventListener('click', (e) => {
                     if (mobileMenu && !mobileMenu.classList.contains('hidden') &&
                         !mobileMenuButton.contains(e.target) &&
@@ -289,46 +270,38 @@
                 });
             }
 
-            // Role selection styling
             const donorRadio = document.getElementById('role_donor');
             const centerRadio = document.getElementById('role_donation_centre');
 
             if (donorRadio && centerRadio) {
-                // Function to update radio button styling
                 function updateRadioStyles() {
-                    // Donor radio styling
                     const donorLabel = donorRadio.closest('label');
                     const donorIcon = donorLabel.querySelector('i');
                     const donorText = donorLabel.querySelector('span');
 
-                    // Center radio styling
                     const centerLabel = centerRadio.closest('label');
                     const centerIcon = centerLabel.querySelector('i');
                     const centerText = centerLabel.querySelector('span');
 
                     if (donorRadio.checked) {
-                        // Donor selected
                         donorLabel.classList.add('bg-red-50', 'border-red-500');
                         donorIcon.classList.add('text-red-600');
                         donorIcon.classList.remove('text-gray-500');
                         donorText.classList.add('text-red-600');
                         donorText.classList.remove('text-gray-700');
 
-                        // Reset center styling
                         centerLabel.classList.remove('bg-red-50', 'border-red-500');
                         centerIcon.classList.remove('text-red-600');
                         centerIcon.classList.add('text-gray-500');
                         centerText.classList.remove('text-red-600');
                         centerText.classList.add('text-gray-700');
                     } else if (centerRadio.checked) {
-                        // Center selected
                         centerLabel.classList.add('bg-red-50', 'border-red-500');
                         centerIcon.classList.add('text-red-600');
                         centerIcon.classList.remove('text-gray-500');
                         centerText.classList.add('text-red-600');
                         centerText.classList.remove('text-gray-700');
 
-                        // Reset donor styling
                         donorLabel.classList.remove('bg-red-50', 'border-red-500');
                         donorIcon.classList.remove('text-red-600');
                         donorIcon.classList.add('text-gray-500');
@@ -337,10 +310,8 @@
                     }
                 }
 
-                // Set initial state
                 updateRadioStyles();
 
-                // Add event listeners
                 donorRadio.addEventListener('change', updateRadioStyles);
                 centerRadio.addEventListener('change', updateRadioStyles);
             }

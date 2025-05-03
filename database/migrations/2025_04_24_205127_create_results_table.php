@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('results', function (Blueprint $table) {
             $table->id();
             $table->foreignId('donation_id')->constrained()->onDelete('cascade');
-
-            $table->string('blood_type')->nullable();
+            $table->foreignId('blood_type_id')->constrained('blood_types')->onDelete('cascade');
 
             $table->float('hemoglobin', 5, 2)->nullable();
             $table->string('blood_pressure')->nullable();

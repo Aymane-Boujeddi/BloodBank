@@ -15,18 +15,11 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             BloodtypeSeeder::class,
-            CitiesSeeder::class,  // Cities must be seeded before any users
+            CitiesSeeder::class,  
         ]);
         
-        // Now create the test user after cities exist
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+     
 
-        $this->call([
-            UserSeeder::class,
-            DonationCenterSeeder::class,  // This should run after users since it uses user_id
-        ]);
+    
     }
 }
