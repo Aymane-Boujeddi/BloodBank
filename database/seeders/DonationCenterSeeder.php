@@ -14,8 +14,6 @@ class DonationCenterSeeder extends Seeder
     public function run(): void
     {
         //
-        DonationCenter::factory(10)->create([
-            'user_id' => 1,
-        ]);
+       
     }
 }
