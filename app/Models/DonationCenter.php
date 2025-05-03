@@ -20,18 +20,18 @@ class DonationCenter extends Model
         'longitude',
         'opening_time',
         'closing_time',
+        'hourly_rate',
+        'status'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
-   public function donationSlots()
+    public function availableDays()
     {
-        return $this->hasMany(DonationSlot::class);
+        return $this->hasMany(AvailableDays::class);
     }
-
     public function donors()
     {
         return $this->hasMany(Donor::class);
