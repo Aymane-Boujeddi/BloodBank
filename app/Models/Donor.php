@@ -44,6 +44,11 @@ class Donor extends Model
     {
         return $this->belongsTo(DonationCenter::class);
     }
+    public function bloodType()
+    {
+        return $this->belongsTo(BloodType::class);
+    } 
+   
     
     
 
