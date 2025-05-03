@@ -4,42 +4,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DonSang - À Propos</title>
+    <title>BloodBank - À Propos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://unpkg.com/scrollreveal"></script>
 </head>
 
 <body class="font-sans">
-    <!-- Barre de Navigation -->
     <nav class="fixed w-full bg-white shadow-md z-50">
         <div class="container mx-auto px-6 py-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <a href="/" class="text-red-600 text-2xl font-bold">DonSang</a>
+                    <a href="{{ route('welcome') }}" class="text-red-600 text-2xl font-bold">BloodBank</a>
                 </div>
 
-                <!-- Menu Mobile -->
                 <div class="md:hidden">
                     <button id="mobile-menu-button" class="text-gray-500 hover:text-gray-600">
                         <i class="fas fa-bars text-2xl"></i>
                     </button>
                 </div>
 
-                <!-- Menu Desktop -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="home.html" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
-                    <a href="about.html" class="text-gray-600 hover:text-red-600 transition">À propos</a>
-                    <a href="contact.html" class="text-gray-600 hover:text-red-600 transition">Contact</a>
-                    <button class="bg-red-600 text-white px-6 py-2 rounded-full hover:bg-red-700 transition">
+                    <a href="{{ route('welcome') }}" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
+                    <a href="{{ route('about') }}" class="text-gray-600 hover:text-red-600 transition">À propos</a>
+                    <a href="{{ route('contact') }}" class="text-gray-600 hover:text-red-600 transition">Contact</a>
+                    <a href="{{ route('login') }}" class="bg-red-600 text-white px-6 py-2 rounded-full hover:bg-red-700 transition">
                         Connexion
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section class="pt-24 bg-gradient-to-br from-red-50 via-red-100 to-white">
         <div class="container mx-auto px-6 py-16">
             <div class="max-w-4xl mx-auto text-center">
@@ -52,7 +48,6 @@
         </div>
     </section>
 
-    <!-- Mission & Values -->
     <section class="py-20">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -89,7 +84,6 @@
         </div>
     </section>
 
-    <!-- Impact Section -->
     <section class="py-20 bg-red-600 text-white">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
@@ -98,7 +92,7 @@
                     <p class="text-red-100">Donneurs Actifs</p>
                 </div>
                 <div>
-                    <div class="text-4xl font-bold mb-2">100+</div>
+                    <div class="text-4xl font-bold mb-2">100+</</div>
                     <p class="text-red-100">Centres Partenaires</p>
                 </div>
                 <div>
@@ -113,9 +107,6 @@
         </div>
     </section>
 
-   
-
-    <!-- Team Section -->
     <section class="py-20">
         <div class="container mx-auto px-6">
             <h2 class="text-4xl font-bold text-center text-gray-800 mb-12">Notre Équipe</h2>
@@ -127,31 +118,29 @@
                     <h3 class="text-xl font-semibold mb-2">Dr. Sophie Martin</h3>
                     <p class="text-gray-600">Directrice Médicale</p>
                 </div>
-                <!-- Add more team members -->
             </div>
         </div>
     </section>
 
-    <!-- Pied de Page -->
     <footer class="bg-gray-800 text-white py-12">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <h3 class="text-xl font-semibold mb-4">DonSang</h3>
+                    <h3 class="text-xl font-semibold mb-4">BloodBank</h3>
                     <p class="text-gray-400">Ensemble, sauvons des vies</p>
                 </div>
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Liens utiles</h4>
                     <ul class="space-y-2">
-                        <li><a href="about.html" class="text-gray-400 hover:text-white">À propos</a></li>
-                        <li><a href="contact.html" class="text-gray-400 hover:text-white">Contact</a></li>
+                        <li><a href="{{ route('about') }}" class="text-gray-400 hover:text-white">À propos</a></li>
+                        <li><a href="{{ route('contact') }}" class="text-gray-400 hover:text-white">Contact</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Légal</h4>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white">Mentions légales</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Confidentialité</a></li>
+                        <li><a href="{{ route('legal') }}" class="text-gray-400 hover:text-white">Mentions légales</a></li>
+                        <li><a href="{{ route('privacy') }}" class="text-gray-400 hover:text-white">Confidentialité</a></li>
                     </ul>
                 </div>
                 <div>
@@ -165,7 +154,5 @@
             </div>
         </div>
     </footer>
-
-   
 </body>
-</html> 
+</html>
