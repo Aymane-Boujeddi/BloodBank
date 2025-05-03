@@ -8,8 +8,7 @@ class Result extends Model
 {
     protected $fillable = [
         'donation_id',
-        'blood_type',
-        'status',
+        'blood_type_id',
         'hemoglobin',
         'blood_pressure',
         'pulse',
