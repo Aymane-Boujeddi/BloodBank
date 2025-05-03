@@ -5,126 +5,127 @@ namespace App\Http\Controllers;
 use App\Models\Donor;
 use App\Http\Requests\StoreDonorRequest;
 use App\Http\Requests\UpdateDonorRequest;
-use App\Models\Rdv;
 use Illuminate\Http\Request;
 use App\Models\DonationCenter;
 use App\Models\City;
+use App\Models\Reservation;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
+use App\Models\BloodType;
+use App\Models\Donation  ;
+use Illuminate\Support\Facades\Auth;
 
 class DonorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
-        return view('donor.donor-dashboard');
-    }
+        $donor = Donor::with('bloodType', 'user.city')
+            ->where('user_id', Auth::id())
+            ->first();
+        
+        if (!$donor) {
+            return redirect()->route('login');
+        }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $donations = Donation::with(['donationCenter', 'results'])
+            ->where('donor_id', $donor->id)
+            ->get();
+        
+        $stats = [
+            'totalDonations' => $donations->count(),
+            'monthlyDonations' => $donations->filter(function($donation) {
+                return Carbon::parse($donation->donation_date)->isCurrentMonth();
+            })->count(),
+        ];
+        
+        $nextAppointment = Reservation::with(['donationCenter.user.city'])
+            ->where('donor_id', $donor->id)
+            ->where('reservation_date', '>=', now()->format('Y-m-d'))
+            ->where('status', '!=', 'cancelled')
+            ->orderBy('reservation_date')
+            ->orderBy('reservation_time')
+            ->first();
+        
+        
+        return view('donor.donor-dashboard', compact(
+            'donor',
+            'stats',
+            'nextAppointment',
+           
+        ));
     }
-
+    
     /**
-     * Store a newly created resource in storage.
+     * Calculate donor's eligibility for different donation types
+     * based on their donation history and results
      */
-    public function store(StoreDonorRequest $request)
-    {
-        //
-    }
-
+  
+    
     /**
-     * Display the specified resource.
+     * Get notifications for the donor dashboard
      */
-    public function show(Donor $donor)
-    {
-        //
-    }
+   
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Donor $donor)
-    {
-        //
-    }
+    public function create() {}
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateDonorRequest $request, Donor $donor)
-    {
-        //
-    }
+    public function store(StoreDonorRequest $request) {}
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function show(Donor $donor) {}
+
+    public function edit(Donor $donor) {}
+
+    public function update(UpdateDonorRequest $request, Donor $donor) {}
+
     public function destroy(Donor $donor)
     {
-        //
         $donor->delete();
         return redirect()->route('donor.dashboard')->with('success', 'Donneur supprimé avec succès');
     }
 
-    /**
-     * Display donation centers with optional filtering by name/address and city
-     */
     public function centers(Request $request)
     {
-        // Start with a base query that joins the necessary tables
         $query = DonationCenter::query()
             ->join('users', 'donation_centers.user_id', '=', 'users.id')
             ->join('cities', 'users.city_id', '=', 'cities.id')
             ->select('donation_centers.*', 'cities.name as city_name');
 
-        // Apply search filter for center name or address
-        if ($request->has('search') && $request->search != '') {
+        if ($request->filled('search')) {
             $search = $request->search;
             $query->where('donation_centers.center_name', 'like', "%{$search}%")
                 ->orWhere('donation_centers.address', 'like', "%{$search}%");
         }
 
-        // Apply city filter
-        if ($request->has('city') && $request->city != '') {
-            $city = $request->city;
-            $query->where('cities.name', $city);
+        if ($request->filled('city')) {
+            $query->where('cities.name', $request->city);
         }
 
-        // Get centers
         $centers = $query->get();
 
-        // Load donation slots for basic information
-        $centers->load('donationSlots');
-
-        // Enhance centers with basic availability information
         foreach ($centers as $center) {
-            // Default availability info based on opening/closing times
             $center->availability_message = "Open from {$center->opening_time} to {$center->closing_time}";
 
-            // Check if there are slots configured for this center
-            if ($center->donationSlots && $center->donationSlots->count() > 0) {
-                $slot = $center->donationSlots->first();
+            $center->available_days = $center->availableDays()->pluck('day')->toArray();
 
-                // Add slots availability information
-                $center->available_slots = $slot->available_slots;
-                $center->reserved_slots = $slot->reserved_slots;
+            $upcoming_dates_array = [];
+            $today = now()->startOfDay();
 
-                // Basic availability message
-                if ($slot->available_slots <= $slot->reserved_slots) {
-                    $center->availability_message = "Currently fully booked";
-                } else {
-                    $slotsLeft = $slot->available_slots - $slot->reserved_slots;
-                    $center->availability_message = "{$slotsLeft} slots available";
+            for ($i = 0; $i < 30; $i++) {
+                $checkDate = $today->copy()->addDays($i);
+                $dayName = $checkDate->format('l');
+
+                if (in_array($dayName, $center->available_days)) {
+                    $formattedDate = $checkDate->format('Y-m-d');
+                    $upcoming_dates_array[] = [
+                        'date' => $formattedDate,
+                        'day_name' => $dayName,
+                        'formatted' => $checkDate->format('d/m/Y'),
+                    ];
                 }
             }
+
+            $center->upcoming_available_dates = $upcoming_dates_array;
         }
 
-        // Get unique cities for filter dropdown
         $cities = City::orderBy('name')->pluck('name')->toArray();
 
         return view('donor.centers', [
@@ -133,31 +134,258 @@ class DonorController extends Controller
         ]);
     }
 
-    public function showCenters(Request $request)
+    
+
+   
+
+    public function availableDays($id)
     {
-        // Get the list of donation centers
-
-    }
-
-    /**
-     * Process a center review submission
-     */
-    public function reviewCenter(Request $request, $id)
-    {
-        $request->validate([
-            'rating' => 'required|integer|min:1|max:5',
-            'comment' => 'nullable|string|max:500'
-        ]);
-
         $center = DonationCenter::findOrFail($id);
+        $availableDays = $center->availableDays()->pluck('day')->toArray();
 
-        // Create a new review
-        // $center->reviews()->create([
-        //     'user_id' => auth()->id(),
-        //     'rating' => $request->rating,
-        //     'comment' => $request->comment
-        // ]);
-
-        return redirect()->route('donor.centers')->with('success', 'Merci pour votre avis!');
+        return response()->json([
+            'available_days' => $availableDays
+        ]);
     }
+
+    public function availableSlotsForDate($centerId, $date)
+    {
+        try {
+            $center = DonationCenter::findOrFail($centerId);
+
+            $parsedDate = \Carbon\Carbon::parse($date);
+            $dayName = $parsedDate->format('l');
+
+            $availableDays = $center->availableDays()->pluck('day')->toArray();
+
+            if (!in_array($dayName, $availableDays)) {
+                if (request()->expectsJson()) {
+                    return response()->json([
+                        'available_slots' => [],
+                        'status' => 'closed',
+                        'message' => "Center is not open on {$dayName}"
+                    ]);
+                }
+
+                return view('donor.centers', compact('center', 'date', 'dayName'))
+                    ->with('status', 'closed')
+                    ->with('message', "Center is not open on {$dayName}")
+                    ->with('available_slots', []);
+            }
+
+            $openingTime = $center->opening_time;
+            $closingTime = $center->closing_time;
+
+            if (!$openingTime || !$closingTime) {
+                if (request()->expectsJson()) {
+                    return response()->json([
+                        'available_slots' => [],
+                        'status' => 'error',
+                        'message' => "Center has invalid operating hours"
+                    ], 500);
+                }
+
+                return view('donor.centers', compact('center', 'date'))
+                    ->with('status', 'error')
+                    ->with('message', "Center has invalid operating hours")
+                    ->with('available_slots', []);
+            }
+
+            $allTimeSlots = [];
+            for ($time = strtotime($openingTime); $time < strtotime($closingTime); $time += 3600) {
+                $allTimeSlots[] = date('H:i', $time);
+            }
+
+            $reservations = Reservation::where('donation_center_id', $centerId)
+                ->where('reservation_date', $date)
+                ->get(['reservation_time']);
+
+            $reservationCounts = [];
+            foreach ($reservations as $reservation) {
+                $time = $reservation->reservation_time;
+                if (!isset($reservationCounts[$time])) {
+                    $reservationCounts[$time] = 1;
+                } else {
+                    $reservationCounts[$time]++;
+                }
+            }
+
+            $availableSlots = [];
+            foreach ($allTimeSlots as $slot) {
+                $count = $reservationCounts[$slot] ?? 0;
+                if ($count < $center->hourly_rate) {
+                    $availableSlots[] = $slot;
+                }
+            }
+
+            $morningSlots = array_filter($availableSlots, function ($slot) {
+                return (int)substr($slot, 0, 2) < 12;
+            });
+
+            $afternoonSlots = array_filter($availableSlots, function ($slot) {
+                return (int)substr($slot, 0, 2) >= 12;
+            });
+
+            $status = count($availableSlots) > 0 ? 'available' : 'full';
+
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'available_slots' => $availableSlots,
+                    'morning_slots' => array_values($morningSlots),
+                    'afternoon_slots' => array_values($afternoonSlots),
+                    'status' => $status,
+                    'hourly_capacity' => $center->hourly_rate,
+                    'total_slots' => count($allTimeSlots),
+                    'reserved_slots' => count($reservations)
+                ]);
+            }
+
+            return view('donor.centers', compact(
+                'center',
+                'date',
+                'availableSlots',
+                'morningSlots',
+                'afternoonSlots',
+                'allTimeSlots',
+                'status'
+            ));
+        } catch (\Exception $e) {
+            Log::error("Error in availableSlotsForDate: " . $e->getMessage());
+
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'available_slots' => [],
+                    'status' => 'error',
+                    'message' => "An unexpected error occurred"
+                ], 500);
+            }
+
+            return view('donor.centers')
+                ->with('status', 'error')
+                ->with('message', "An unexpected error occurred")
+                ->with('available_slots', []);
+        }
+    }
+
+    public function availableDaysForCalendar($centerId)
+    {
+        try {
+            $center = DonationCenter::findOrFail($centerId);
+
+            $openDays = $center->availableDays()->pluck('day')->toArray();
+
+            if (empty($openDays)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Le centre n\'a pas configuré de jours disponibles'
+                ]);
+            }
+
+            $availableDates = [];
+            $today = now()->startOfDay();
+
+            for ($i = 0; $i < 60; $i++) {
+                $date = $today->copy()->addDays($i);
+                $dayName = $date->format('l');
+
+                if (in_array($dayName, $openDays)) {
+                    $availableDates[] = [
+                        'date' => $date->format('Y-m-d'),
+                        'day_name' => $this->translateDayToFrench($dayName),
+                        'availability' => 'available'
+                    ];
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'available_dates' => $availableDates,
+                'center_hours' => [
+                    'opening' => $center->opening_time,
+                    'closing' => $center->closing_time
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in availableDaysForCalendar: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => "Une erreur s'est produite lors du chargement des dates disponibles"
+            ], 500);
+        }
+    }
+
+    public function getAvailableTimeSlots($centerId, $date)
+    {
+        try {
+            $center = DonationCenter::with('availableDays')->findOrFail($centerId);
+            $parsedDate = Carbon::parse($date);
+            $dayName = $parsedDate->format('l');
+            $openDays = $center->availableDays->pluck('day')->toArray();
+            if (!in_array($dayName, $openDays)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Le centre n'est pas ouvert le " . $this->translateDayToFrench($dayName) . "."
+                ]);
+            }
+
+            $openingTimeStr = $center->opening_time;
+            $closingTimeStr = $center->closing_time;
+
+            if (empty($openingTimeStr) || empty($closingTimeStr)) {
+                return response()->json(['success' => false, 'message' => "Horaires manquants ou invalides."]);
+            }
+
+            $openingTs = strtotime($openingTimeStr);
+            $closingTs = strtotime($closingTimeStr);
+
+            if ($openingTs === false || $closingTs === false || $openingTs >= $closingTs) {
+                return response()->json(['success' => false, 'message' => "Horaires mal configurés."]);
+            }
+
+            $reservationCounts = Reservation::where('donation_center_id', $centerId)
+                ->where('reservation_date', $parsedDate->format('Y-m-d'))
+                ->selectRaw("DATE_FORMAT(reservation_time, '%H:%i') as time_slot, COUNT(*) as count")
+                ->groupBy('time_slot')
+                ->pluck('count', 'time_slot')
+                ->toArray();
+
+            $availableHours = [];
+            $hourlyRate = max(1, (int)($center->hourly_rate ?? 1));
+
+            for ($time = $openingTs; $time < $closingTs; $time += 3600) {
+                $slot = date('H:i', $time);
+                $count = $reservationCounts[$slot] ?? 0;
+                if ($count < $hourlyRate) {
+                    $availableHours[] = $slot;
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'available_hours' => $availableHours
+            ]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['success' => false, 'message' => 'Centre de donation non trouvé.'], 404);
+        } catch (\Exception $e) {
+            Log::error("General Exception in getAvailableTimeSlots: " . $e->getMessage() . " on line " . $e->getLine());
+            return response()->json(['success' => false, 'message' => "Une erreur serveur s'est produite."], 500);
+        }
+    }
+
+    private function translateDayToFrench($dayName)
+    {
+        $days = [
+            'Monday' => 'Lundi',
+            'Tuesday' => 'Mardi',
+            'Wednesday' => 'Mercredi',
+            'Thursday' => 'Jeudi',
+            'Friday' => 'Vendredi',
+            'Saturday' => 'Samedi',
+            'Sunday' => 'Dimanche'
+        ];
+
+        return $days[$dayName] ?? $dayName;
+    }
+
+ 
 }
