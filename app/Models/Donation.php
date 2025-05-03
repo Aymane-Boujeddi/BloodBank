@@ -22,4 +22,8 @@ class Donation extends Model
     {
         return $this->belongsTo(DonationCenter::class);
     }
+    public function result()
+    {
+        return $this->hasOne(Result::class);
+    }
 }
