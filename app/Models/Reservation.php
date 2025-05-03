@@ -7,16 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 class Reservation extends Model
 {
     //
-    protected $fillable = ['date', 'time', 'donor_id', 'center_id'];
+    protected $fillable = [
+        'donor_id',
+        'donation_center_id',
+        'reservation_date',
+        'reservation_time',
+    ];
 
     public function donor()
     {
         return $this->belongsTo(Donor::class);
     }
 
-    public function center()
-    {
+  
+    public function donationCenter(){
+
         return $this->belongsTo(DonationCenter::class);
     }
-    
 }

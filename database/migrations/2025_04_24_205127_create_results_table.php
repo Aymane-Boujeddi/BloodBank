@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('donation_id')->constrained()->onDelete('cascade');
 
             $table->string('blood_type')->nullable();
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
 
             $table->float('hemoglobin', 5, 2)->nullable();
             $table->string('blood_pressure')->nullable();
@@ -25,10 +24,6 @@ return new class extends Migration
             $table->boolean('has_medical_issues')->default(false);
             $table->text('medical_notes')->nullable();
             $table->date('next_eligible_donation_date')->nullable();
-
-            $table->boolean('certificate_generated')->default(false);
-
-            $table->dateTime('published_at')->nullable();
             $table->timestamps();
         });
     }

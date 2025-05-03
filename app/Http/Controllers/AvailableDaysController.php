@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DonationSlot;
+use App\Models\AvailableDays;
 use Illuminate\Http\Request;
 
-class DonationSlotController extends Controller
+class AvailableDaysController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class DonationSlotController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(DonationSlot $donationSlot)
+    public function show(AvailableDays $availableDays)
     {
         //
     }
@@ -42,7 +42,7 @@ class DonationSlotController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(DonationSlot $donationSlot)
+    public function edit(AvailableDays $availableDays)
     {
         //
     }
@@ -50,7 +50,7 @@ class DonationSlotController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, DonationSlot $donationSlot)
+    public function update(Request $request, AvailableDays $availableDays)
     {
         //
     }
@@ -58,7 +58,7 @@ class DonationSlotController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DonationSlot $donationSlot)
+    public function destroy(AvailableDays $availableDays)
     {
         //
     }

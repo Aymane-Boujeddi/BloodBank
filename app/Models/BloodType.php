@@ -10,8 +10,9 @@ class BloodType extends Model
     protected $fillable = [
         'name',
     ];
-    function donors()
+    public function donors()
     {
         return $this->hasMany(Donor::class);
     }
+   
 }
