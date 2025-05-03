@@ -24,10 +24,6 @@ return new class extends Migration
             $table->boolean('has_medical_issues')->default(false);
             $table->text('medical_notes')->nullable();
             $table->date('next_eligible_donation_date')->nullable();
-
-            $table->boolean('certificate_generated')->default(false);
-
-            $table->dateTime('published_at')->nullable();
             $table->timestamps();
         });
     }

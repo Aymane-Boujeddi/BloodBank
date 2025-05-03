@@ -20,6 +20,7 @@ return new class extends Migration
             $table->enum('role', ['donor', 'admin','donation_centre']);
             $table->enum('profile_status', ['incomplete', 'complete'])->default('incomplete');
             $table->timestamp('last_login');
+            $table->rememberToken();
             $table->timestamps();
         });
 
