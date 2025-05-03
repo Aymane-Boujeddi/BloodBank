@@ -24,17 +24,10 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $role = fake()->randomElement(['donor', 'donation_centre', 'admin']);
         
-        $city = City::inRandomOrder()->first();
         
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'password' => static::$password ??= Hash::make('password'),
-            'role' => $role,
-            'city_id' => $city ? $city->id : null, 
-            'last_login' => now(),
+           
         ];
     }
 
