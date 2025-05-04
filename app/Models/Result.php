@@ -15,8 +15,7 @@ class Result extends Model
         'has_medical_issues',
         'medical_notes',
         'next_eligible_donation_date',
-        'certificate_generated',
-        'published_at'
+        'amount'
     ];
 
     public function donation()
@@ -27,6 +26,10 @@ class Result extends Model
     public function donor()
     {
         return $this->belongsTo(Donor::class);
+    }
+    public function bloodType()
+    {
+        return $this->belongsTo(BloodType::class);
     }
 
 
