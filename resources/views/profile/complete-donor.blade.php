@@ -11,22 +11,21 @@
 </head>
 
 <body class="font-sans">
-    <!-- Barre de Navigation -->
     <nav class="fixed w-full bg-white shadow-md z-50">
         <div class="container mx-auto px-6 py-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <a href="/" class="text-red-600 text-2xl font-bold">BloodBank</a>
+                    <a href="{{route('home')}}" class="text-red-600 text-2xl font-bold">BloodBank</a>
                 </div>
 
-                <!-- Menu Mobile -->
+               
                 <div class="md:hidden">
                     <button id="mobile-menu-button" class="text-gray-500 hover:text-gray-600">
                         <i class="fas fa-bars text-2xl"></i>
                     </button>
                 </div>
 
-                <!-- Menu Desktop -->
+             
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="/" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
                     <a href="/about" class="text-gray-600 hover:text-red-600 transition">À propos</a>
@@ -44,7 +43,7 @@
                     @endauth
                 </div>
 
-                <!-- Menu Mobile Content -->
+               
                 <div class="hidden md:hidden absolute top-full left-0 right-0 bg-white shadow-md p-6" id="mobile-menu">
                     <div class="flex flex-col space-y-4">
                         <a href="/" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
@@ -65,11 +64,11 @@
         </div>
     </nav>
 
-    <!-- Profile Completion Section -->
+
     <section class="min-h-screen pt-24 pb-12 bg-gradient-to-br from-red-50 via-red-100 to-white flex items-center">
         <div class="container mx-auto px-6 my-8">
             <div class="max-w-2xl mx-auto">
-                <!-- Logo et Titre -->
+               
                 <div class="text-center mb-8">
                     <div class="inline-block p-4 bg-red-100 rounded-full mb-4">
                         <i class="fas fa-user-edit text-red-600 text-4xl"></i>
@@ -78,7 +77,7 @@
                     <p class="text-gray-600 mt-2">Ajoutez vos informations spécifiques pour une meilleure expérience</p>
                 </div>
 
-                <!-- Progress Steps -->
+               
                 <div class="flex items-center justify-center mb-8">
                     <div class="flex items-center">
                         <div class="rounded-full h-8 w-8 flex items-center justify-center bg-green-500 text-white">
@@ -93,15 +92,15 @@
                     </div>
                 </div>
 
-                <!-- Formulaire de Complétion de Profil -->
+               
                 <div class="bg-white rounded-xl shadow-lg p-8">
-                    <form action="{{ route('donor-profile.complete') }}" method="POST" class="space-y-6">
+                    <form action="{{ route('completeProfile') }}" method="POST" class="space-y-6">
                         @csrf
 
-                            <!-- Donor specific fields -->
+                           
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">Informations du donneur</h3>
 
-                            <!-- Téléphone (pour les donneurs) -->
+                          
                             <div>
                                 <label for="phone_number" class="block text-sm font-medium text-gray-700 mb-2">Numéro
                                     de téléphone</label>
@@ -119,7 +118,6 @@
                                 @enderror
                             </div>
 
-                            <!-- Date de naissance (pour les donneurs) -->
                             <div>
                                 <label for="date_of_birth" class="block text-sm font-medium text-gray-700 mb-2">Date
                                     de naissance</label>
@@ -136,7 +134,7 @@
                                 @enderror
                             </div>
 
-                            <!-- Blood Type (for donors) -->
+                          
                             <div>
                                 <label for="blood_type_id" class="block text-sm font-medium text-gray-700 mb-2">Groupe
                                     sanguin</label>
@@ -164,7 +162,7 @@
                                 @enderror
                             </div>
 
-                            <!-- Previous donation history -->
+                         
                             <div>
                                 <label for="has_donated"
                                     class="block text-sm font-medium text-gray-700 mb-2">Avez-vous déjà donné du
@@ -196,12 +194,8 @@
                             </div>
                         
 
-                        <!-- Bouton de soumission -->
+                    
                         <div class="flex items-center justify-between pt-4">
-                            <a href="{{ auth()->user()->role === 'donor' ? route('donor.dashboard') : route('donationCenter.dashboard') }}"
-                                class="text-gray-600 hover:text-gray-800 transition">
-                                Je complèterai plus tard
-                            </a>
                             <button type="submit"
                                 class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition transform hover:scale-105">
                                 Compléter mon profil
@@ -213,7 +207,7 @@
         </div>
     </section>
 
-    <!-- Pied de Page -->
+ 
     <footer class="bg-gray-800 text-white py-12">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -248,9 +242,7 @@
     </footer>
 
     <script>
-        // Menu mobile
         document.addEventListener('DOMContentLoaded', function() {
-            // Mobile menu toggle
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
 
@@ -260,7 +252,6 @@
                     mobileMenu.classList.toggle('hidden');
                 });
 
-                // Close mobile menu when clicking outside
                 document.addEventListener('click', (e) => {
                     if (mobileMenu && !mobileMenu.classList.contains('hidden') &&
                         !mobileMenuButton.contains(e.target) &&
