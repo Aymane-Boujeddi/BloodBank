@@ -23,6 +23,7 @@ class ReservationController extends Controller
                 'date' => 'required|date|after_or_equal:today',
                 'time' => 'required|date_format:H:i',
             ]);
+            // dd($request->all());
 
             $user = Auth::user();
 
@@ -31,9 +32,11 @@ class ReservationController extends Controller
             
 
             $existingAppointment = Reservation::where('donor_id', $donor->id)
-                ->get();
+                ->first() ? true : false;
+                
 
             if ($existingAppointment) {
+                // dd('hello');
                 return redirect()->back()->with('error', 'Vous avez déjà un rendez-vous .');
             }
 

@@ -17,10 +17,7 @@ use Illuminate\Http\RedirectResponse;
 
 class UserController extends Controller
 {
-    public function index()
-    {
-        return view('users.index');
-    }
+    
 
     private function updateLogin($userId)
     {
@@ -77,7 +74,7 @@ class UserController extends Controller
                 return redirect()->intended(route('donor.dashboard'));
             } elseif ($user->role === 'donation_centre') {
                 if ($user->profile_status === 'incomplete') {
-                    return redirect()->route('center-profile.complete');
+                    return redirect()->route('profile.complete');
                 }
 
                 $centre = DonationCenter::where('user_id', $user->id)->first();
@@ -213,4 +210,5 @@ class UserController extends Controller
 
         return redirect()->route('home')->with('error', 'Invalid user role.');
     }
+  
 }

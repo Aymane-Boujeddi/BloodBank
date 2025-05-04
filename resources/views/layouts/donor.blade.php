@@ -5,184 +5,137 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Tableau de bord du donneur de sang">
-    <title>{{ $title ?? 'Tableau de bord' }} - DonSang</title>
+    <title>@yield('page-title', 'Tableau de bord') - BloodBank</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-        .sidebar-link {
-            transition: all 0.2s ease;
-            border-left: 3px solid transparent;
-        }
-
-        .sidebar-link.active {
-            background-color: rgba(239, 68, 68, 0.1);
-            border-left: 3px solid #ef4444;
-            color: #ef4444;
-        }
-
-        .sidebar-link:hover:not(.active) {
-            background-color: rgba(239, 68, 68, 0.05);
-        }
-
-        #map {
-            height: 400px;
-            width: 100%;
-            border-radius: 0.5rem;
-        }
-
-        .rating {
-            color: #fbbf24;
-        }
-    </style>
+    <link href="{{ asset('css/donor-layout.css') }}" rel="stylesheet" />
     @stack('styles')
 </head>
 
 <body class="bg-gray-50">
-    <!-- Top Navigation Bar -->
-    <nav class="fixed w-full bg-white shadow-md z-50">
-        <div class="container mx-auto px-6 py-3">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <a href="/" class="flex items-center">
-                        <i class="fas fa-tint text-red-600 text-xl mr-2"></i>
-                        <span class="text-xl font-semibold text-red-600">Don</span>
-                        <span class="text-xl font-semibold text-gray-700">Sang</span>
-                    </a>
-                    <span class="hidden md:inline-block text-sm text-gray-500 ml-2">| Espace Donneur</span>
-                </div>
+    <div class="flex h-screen">
+        <aside id="sidebar"
+            class="sidebar fixed inset-y-0 left-0 z-40 w-64 bg-white overflow-y-auto custom-scrollbar">
+            <div class="p-5">
+                <a href="{{ route('donor.dashboard') }}" class="flex items-center mb-8">
+                    <i class="fas fa-tint text-red-600 text-2xl mr-2"></i>
+                    <span class="text-2xl font-semibold text-red-600">Blood</span>
+                    <span class="text-2xl font-semibold text-gray-700">Bank</span>
+                </a>
 
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-4">
-                    <a href="{{ route('donor.centers') }}"
-                        class="px-3 py-2 {{ request()->routeIs('donor.centers') ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-600' }} hover:text-red-600 font-medium">
-                        <i class="fas fa-map-marker-alt mr-1"></i> Centres
-                    </a>
-                    <a href="{{ route('donor.appointments') }}"
-                        class="px-3 py-2 {{ request()->routeIs('donor.appointments') ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-600' }} hover:text-red-600 font-medium">
-                        <i class="fas fa-calendar-alt mr-1"></i> Rendez-vous
-                    </a>
-                    <a href="{{ route('donor.history') }}"
-                        class="px-3 py-2 {{ request()->routeIs('donor.history') ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-600' }} hover:text-red-600 font-medium">
-                        <i class="fas fa-history mr-1"></i> Historique
-                    </a>
-                    <a href="{{ route('donor.reviews') }}"
-                        class="px-3 py-2 {{ request()->routeIs('donor.reviews') ? 'text-red-600 border-b-2 border-red-600' : 'text-gray-600' }} hover:text-red-600 font-medium">
-                        <i class="fas fa-star mr-1"></i> Avis
-                    </a>
-
-                    <!-- User Menu -->
-                    <div class="relative ml-3">
-                        <button id="profile-menu-button" class="flex items-center text-gray-700 focus:outline-none">
-                            <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white">
-                                {{ substr(auth()->user()->name ?? 'A', 0, 1) }}
-                            </div>
-                            <i class="fas fa-chevron-down ml-1 text-xs"></i>
-                        </button>
-
-                        <!-- Profile Dropdown -->
-                        <div id="profile-dropdown"
-                            class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
-                            <div class="py-1">
-                                <div class="px-4 py-2 border-b border-gray-100">
-                                    <p class="text-sm font-medium text-gray-900">
-                                        {{ auth()->user()->name ?? 'Anonymous' }}</p>
-                                    <p class="text-xs text-gray-500 truncate">{{ auth()->user()->email ?? 'No email' }}
-                                    </p>
-                                </div>
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                    <i class="fas fa-user mr-2 w-4 text-gray-500"></i> Mon profil
-                                </a>
-                                <form method="POST" action="{{ route('logout') }}" class="block w-full">
-                                    @csrf
-                                    <button type="submit"
-                                        class="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left">
-                                        <i class="fas fa-sign-out-alt mr-2 w-4 text-gray-500"></i> Déconnexion
-                                    </button>
-                                </form>
-                            </div>
+                <div class="mb-6 pb-6 border-b border-gray-200">
+                    <div class="flex items-center">
+                        <div
+                            class="h-12 w-12 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center text-white text-lg font-semibold shadow-sm mr-3">
+                            {{ substr(auth()->user()->name ?? 'A', 0, 1) }}
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-900">{{ auth()->user()->name ?? 'Donneur' }}</p>
+                            <p class="text-xs text-gray-600">{{ auth()->user()->email ?? '' }}</p>
                         </div>
                     </div>
                 </div>
+                <nav class="space-y-1">
+                    <a href="{{ route('donor.dashboard') }}"
+                        class="sidebar-link flex items-center px-4 py-3 text-sm rounded-lg {{ request()->routeIs('donor.dashboard') ? 'active' : '' }}">
+                        <i class="fas fa-tachometer-alt mr-3 w-5 text-center"></i> Tableau de bord
+                    </a>
+                    <a href="{{ route('donor.centers') }}"
+                        class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700 rounded-lg {{ request()->routeIs('donor.centers') ? 'active' : '' }}">
+                        <i class="fas fa-map-marker-alt mr-3 w-5 text-center"></i> Centres
+                    </a>
+                    <a href="{{ route('donor.appointments') }}"
+                        class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700 rounded-lg {{ request()->routeIs('donor.appointments') ? 'active' : '' }}">
+                        <i class="fas fa-calendar-alt mr-3 w-5 text-center"></i> Rendez-vous
+                    </a>
+                    <a href="{{ route('donor.history') }}"
+                        class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700 rounded-lg {{ request()->routeIs('donor.history') ? 'active' : '' }}">
+                        <i class="fas fa-history mr-3 w-5 text-center"></i> Historique
+                    </a>
+                  
 
-                <!-- Mobile Menu Button -->
-                <div class="md:hidden">
-                    <button id="mobile-menu-button" class="text-gray-500 hover:text-red-600">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
+                    <div class="my-5 border-t border-gray-200"></div>
+
+                    <p class="px-4 text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Compte</p>
+
+                   
+                   
+                    <form method="POST" action="{{ route('logout') }}" class="block w-full text-left">
+                        @csrf
+                        <button type="submit"
+                            class="sidebar-link flex items-center w-full px-4 py-3 text-sm text-gray-700 rounded-lg text-left">
+                            <i class="fas fa-sign-out-alt mr-3 w-5 text-center"></i> Déconnexion
+                        </button>
+                    </form>
+                </nav>
+
+                <div class="mt-10 bg-gray-50 p-4 rounded-lg">
+                    <h4 class="text-sm font-medium text-gray-800">Besoin d'aide ?</h4>
+                    <p class="text-xs text-gray-600 mt-1">Nous sommes là pour vous aider avec vos questions.</p>
+                    <a href="#" class="text-xs text-red-600 mt-2 inline-block hover:text-red-800">
+                        <i class="fas fa-question-circle mr-1"></i> Centre d'assistance
+                    </a>
                 </div>
             </div>
-        </div>
+        </aside>
 
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t shadow-md">
-            <div class="container mx-auto px-6 py-2 space-y-1">
-                <a href="{{ route('donor.centers') }}"
-                    class="block px-3 py-2 {{ request()->routeIs('donor.centers') ? 'bg-red-50 text-red-600' : 'text-gray-600' }} rounded-lg hover:bg-red-50">
-                    <i class="fas fa-map-marker-alt mr-2"></i> Centres
-                </a>
-                <a href="{{ route('donor.appointments') }}"
-                    class="block px-3 py-2 {{ request()->routeIs('donor.appointments') ? 'bg-red-50 text-red-600' : 'text-gray-600' }} rounded-lg hover:bg-red-50">
-                    <i class="fas fa-calendar-alt mr-2"></i> Rendez-vous
-                </a>
-                <a href="{{ route('donor.history') }}"
-                    class="block px-3 py-2 {{ request()->routeIs('donor.history') ? 'bg-red-50 text-red-600' : 'text-gray-600' }} rounded-lg hover:bg-red-50">
-                    <i class="fas fa-history mr-2"></i> Historique
-                </a>
-                <a href="{{ route('donor.reviews') }}"
-                    class="block px-3 py-2 {{ request()->routeIs('donor.reviews') ? 'bg-red-50 text-red-600' : 'text-gray-600' }} rounded-lg hover:bg-red-50">
-                    <i class="fas fa-star mr-2"></i> Avis
-                </a>
-            </div>
-        </div>
-    </nav>
+        <div id="overlay" class="overlay fixed inset-0 bg-black opacity-50 z-30 hidden"></div>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 pt-20 pb-8">
-        @yield('content')
-    </main>
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <header class="bg-white shadow-sm relative z-10">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between items-center h-16">
+                        <div class="flex-1">
+                            <h1 class="text-xl font-semibold text-gray-800">
+                                <span class="text-red-600">@yield('page-title', 'Dashboard')</span>
+                            </h1>
+                        </div>
+                        <div class="flex items-center md:hidden">
+                            <button id="mobile-menu-button"
+                                class="p-2 rounded-md text-gray-500 hover:text-red-600 hover:bg-gray-100 focus:outline-none">
+                                <i class="fas fa-bars text-xl"></i>
+                            </button>
+                        </div>
+
+                        <div class="md:hidden">
+                            <h2 class="text-lg font-medium text-gray-800">{{ $title ?? 'Tableau de bord' }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 main-content">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    @yield('content')
+                </div>
+            </main>
+        </div>
+    </div>
+
+    @yield('modals')
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Mobile menu toggle
+            const sidebar = document.getElementById('sidebar');
             const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
+            const overlay = document.getElementById('overlay');
 
-            if (mobileMenuButton && mobileMenu) {
-                mobileMenuButton.addEventListener('click', () => {
-                    mobileMenu.classList.toggle('hidden');
+            if (mobileMenuButton && sidebar && overlay) {
+                mobileMenuButton.addEventListener('click', function() {
+                    sidebar.classList.toggle('open');
+                    overlay.classList.toggle('open');
+                });
+                
+                overlay.addEventListener('click', function() {
+                    sidebar.classList.remove('open');
+                    overlay.classList.remove('open');
                 });
             }
-
-            // Profile menu toggle
-            const profileMenuButton = document.getElementById('profile-menu-button');
-            const profileDropdown = document.getElementById('profile-dropdown');
-
-            if (profileMenuButton && profileDropdown) {
-                profileMenuButton.addEventListener('click', () => {
-                    profileDropdown.classList.toggle('hidden');
-                });
-            }
-
-            // Close dropdowns when clicking outside
-            document.addEventListener('click', function(e) {
-                if (profileMenuButton && profileDropdown && !profileDropdown.classList.contains('hidden') &&
-                    !profileMenuButton.contains(e.target) &&
-                    !profileDropdown.contains(e.target)) {
-                    profileDropdown.classList.add('hidden');
-                }
-
-                if (mobileMenuButton && mobileMenu && !mobileMenu.classList.contains('hidden') &&
-                    !mobileMenuButton.contains(e.target) &&
-                    !mobileMenu.contains(e.target)) {
-                    mobileMenu.classList.add('hidden');
-                }
-            });
         });
     </script>
     @stack('scripts')

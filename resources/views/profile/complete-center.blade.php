@@ -48,22 +48,19 @@
 </head>
 
 <body class="font-sans">
-    <!-- Barre de Navigation -->
     <nav class="fixed w-full bg-white shadow-md z-50">
         <div class="container mx-auto px-6 py-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <a href="/" class="text-red-600 text-2xl font-bold">BloodBank</a>
+                    <a href="{{route('home')}}" class="text-red-600 text-2xl font-bold">BloodBank</a>
                 </div>
 
-                <!-- Menu Mobile -->
                 <div class="md:hidden">
                     <button id="mobile-menu-button" class="text-gray-500 hover:text-gray-600">
                         <i class="fas fa-bars text-2xl"></i>
                     </button>
                 </div>
 
-                <!-- Menu Desktop -->
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="/" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
                     <a href="/about" class="text-gray-600 hover:text-red-600 transition">À propos</a>
@@ -81,7 +78,6 @@
                     @endauth
                 </div>
 
-                <!-- Menu Mobile Content -->
                 <div class="hidden md:hidden absolute top-full left-0 right-0 bg-white shadow-md p-6" id="mobile-menu">
                     <div class="flex flex-col space-y-4">
                         <a href="/" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
@@ -102,11 +98,9 @@
         </div>
     </nav>
 
-    <!-- Profile Completion Section -->
     <section class="min-h-screen pt-24 pb-12 bg-gradient-to-br from-red-50 via-red-100 to-white flex items-center">
         <div class="container mx-auto px-6 my-8">
             <div class="max-w-2xl mx-auto">
-                <!-- Logo et Titre -->
                 <div class="text-center mb-8">
                     <div class="inline-block p-4 bg-red-100 rounded-full mb-4">
                         <i class="fas fa-hospital text-red-600 text-4xl"></i>
@@ -116,7 +110,6 @@
                         les donneurs</p>
                 </div>
 
-                <!-- Progress Steps -->
                 <div class="flex items-center justify-center mb-8">
                     <div class="flex items-center">
                         <div class="rounded-full h-8 w-8 flex items-center justify-center bg-green-500 text-white">
@@ -131,7 +124,6 @@
                     </div>
                 </div>
 
-                <!-- Formulaire de Complétion de Profil -->
                 <div class="bg-white rounded-xl shadow-lg p-8">
                     @if ($errors->any())
                         <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded-r-lg">
@@ -152,13 +144,11 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('center-profile.complete') }}" method="POST" class="space-y-6">
+                    <form action="{{ route('completeProfile') }}" method="POST" class="space-y-6">
                         @csrf
 
-                        <!-- Center information heading -->
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">Informations du centre de don</h3>
 
-                        <!-- Center Name -->
                         <div>
                             <label for="center_name" class="block text-sm font-medium text-gray-700 mb-2">Nom du
                                 centre</label>
@@ -176,7 +166,6 @@
                             @enderror
                         </div>
 
-                        <!-- Address -->
                         <div>
                             <label for="address" class="block text-sm font-medium text-gray-700 mb-2">Adresse</label>
                             <div class="relative">
@@ -192,7 +181,6 @@
                             @enderror
                         </div>
 
-                        <!-- Phone Number -->
                         <div>
                             <label for="phone_number" class="block text-sm font-medium text-gray-700 mb-2">Numéro de
                                 téléphone</label>
@@ -210,7 +198,6 @@
                             @enderror
                         </div>
 
-                        <!-- Opening Hours -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Horaires d'ouverture</label>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -259,7 +246,6 @@
                             @enderror
                         </div>
 
-                        <!-- Available Days -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Jours d'ouverture</label>
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-1">
@@ -291,7 +277,6 @@
                             @enderror
                         </div>
 
-                        <!-- Hourly Rate -->
                         <div>
                             <label for="hourly_rate" class="block text-sm font-medium text-gray-700 mb-2">Capacité
                                 horaire</label>
@@ -311,18 +296,15 @@
                             @enderror
                         </div>
 
-                        <!-- Location heading -->
                         <h3 class="text-lg font-semibold text-gray-800 pt-4 mb-2">Emplacement du centre</h3>
                         <p class="text-sm text-gray-500 mb-4">Cliquez sur la carte pour définir l'emplacement exact de
                             votre centre de don</p>
 
-                        <!-- Replace it with a simpler instruction -->
                         <div class="text-sm text-gray-600 mb-4">
                             <i class="fas fa-info-circle mr-1 text-blue-500"></i>
                             Cliquez directement sur la carte pour définir l'emplacement de votre centre.
                         </div>
 
-                        <!-- Map -->
                         <div class="relative mt-4">
                             <div id="map" class="border border-gray-300"></div>
                             <div class="coordinates-display" id="coordinates-display">
@@ -340,12 +322,7 @@
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
 
-                        <!-- Bouton de soumission -->
                         <div class="flex items-center justify-between pt-6">
-                            <a href="{{ route('donationCenter.dashboard') }}"
-                                class="text-gray-600 hover:text-gray-800 transition">
-                                Je complèterai plus tard
-                            </a>
                             <button type="submit"
                                 class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition transform hover:scale-105">
                                 Compléter le profil
@@ -357,7 +334,6 @@
         </div>
     </section>
 
-    <!-- Pied de Page -->
     <footer class="bg-gray-800 text-white py-12">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -393,51 +369,39 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Wait for page to load
         window.onload = function() {
-            // Create a simple map
             var map = L.map('map').setView([31.7917, -7.0926], 5);
 
-            // Add map tiles
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(map);
 
-            // Create a marker variable
             var marker = null;
 
-            // Get form inputs
             var latInput = document.getElementById('latitude');
             var lngInput = document.getElementById('longitude');
             var latDisplay = document.getElementById('lat-display');
             var lngDisplay = document.getElementById('lng-display');
 
-            // Show marker if we already have coordinates
             if (latInput.value && lngInput.value) {
                 marker = L.marker([latInput.value, lngInput.value]).addTo(map);
                 latDisplay.textContent = latInput.value;
                 lngDisplay.textContent = lngInput.value;
             }
 
-            // When user clicks the map
             map.on('click', function(e) {
-                // Get the coordinates
                 var lat = e.latlng.lat;
                 var lng = e.latlng.lng;
 
-                // If we already have a marker, remove it
                 if (marker) {
                     map.removeLayer(marker);
                 }
 
-                // Add a new marker at the clicked position
                 marker = L.marker([lat, lng]).addTo(map);
 
-                // Update our form values
                 latInput.value = lat.toFixed(6);
                 lngInput.value = lng.toFixed(6);
 
-                // Show coordinates to user
                 latDisplay.textContent = lat.toFixed(6);
                 lngDisplay.textContent = lng.toFixed(6);
             });

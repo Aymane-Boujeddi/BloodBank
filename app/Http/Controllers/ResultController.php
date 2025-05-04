@@ -32,6 +32,7 @@ class ResultController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'donation_id' => 'required|exists:donations,id',
             'blood_type_id' => 'required|string|exists:blood_types,id',
@@ -50,17 +51,17 @@ class ResultController extends Controller
             return redirect()->back()->with('error', 'Un résultat existe déjà pour ce don.');
         }
 
-        $result = new Result();
-        $result->donation_id = $request->donation_id;
-        $result->blood_type = $request->blood_type;
-        $result->hemoglobin = $request->hemoglobin;
-        $result->blood_pressure = $request->blood_pressure;
-        $result->pulse = $request->pulse;
-        $result->amount = $request->amount;
-        $result->has_medical_issues = $request->has_medical_issues ?? false;
-        $result->medical_notes = $request->medical_notes;
-        $result->next_eligible_donation_date = $request->next_eligible_donation_date;
-        $result->save();
+       Result::create([
+            'donation_id' => $request->donation_id,
+            'blood_type_id' => $request->blood_type_id,
+            'hemoglobin' => $request->hemoglobin,
+            'blood_pressure' => $request->blood_pressure,
+            'pulse' => $request->pulse,
+            'amount' => $request->amount,
+            'has_medical_issues' => $request->has_medical_issues ?? false,
+            'medical_notes' => $request->medical_notes,
+            'next_eligible_donation_date' => $request->next_eligible_donation_date,
+        ]);
 
         return redirect()->route('donationCenter.centerResultsPage')->with('success', 'Résultat ajouté avec succès.');
     }
@@ -75,10 +76,7 @@ class ResultController extends Controller
         return view('donationCenter.results.show', compact('result'));
     }
 
-    public function edit()
-    {
-      
-    }
+  
 
     public function update(Request $request, Result $result)
     {
@@ -137,8 +135,5 @@ class ResultController extends Controller
         return view('donor.results', compact('results'));
     }
 
-    private function schema_has_column($table, $column)
-    {
-        return Schema::hasColumn($table, $column);
-    }
+   
 }

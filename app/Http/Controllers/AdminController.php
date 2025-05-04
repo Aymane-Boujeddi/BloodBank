@@ -17,90 +17,47 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function index()
-    {
-        return view('admin.admin-dashboard');
-    }
-
-    public function create()
-    {
-    }
-
-    public function store(StoreAdminRequest $request)
-    {
-    }
-
-    public function show(Admin $admin)
-    {
-    }
-
-    public function edit(Admin $admin)
-    {
-    }
-
-    public function update(UpdateAdminRequest $request, Admin $admin)
-    {
-    }
-
-    public function destroy(Admin $admin)
-    {
-    }
-
-    public function approveCenter($id)
-    {
-        $center = DonationCenter::findOrFail($id);
-        $center->status = 'approved';
-        $center->save();
-
-        return redirect()->route('admin.centers.index')->with('success', 'Donation center approved successfully.');
-    }
     
-    public function rejectCenter($id)
-    {
-        $center = DonationCenter::findOrFail($id);
-        $center->status = 'rejected';
-        $center->save();
+    // public function approveCenter($id)
+    // {
+    //     $center = DonationCenter::findOrFail($id);
+    //     $center->status = 'approved';
+    //     $center->save();
 
-        return redirect()->route('admin.centers.index')->with('success', 'Donation center rejected successfully.');
-    }
-
-    public function showDashboardAdmin()
-    {
-        $pendingCenters = DonationCenter::where('status', 'pending')->get();
-        $approvedCenters = DonationCenter::where('status', 'approved')->get();
-        $stats = [
-            'total_centers' => DonationCenter::count(),
-            'pending_centers' => $pendingCenters->count(),
-            'approved_centers' => $approvedCenters->count(),
-            'total_reservations' => Reservation::count(),
-            'total_donors' => Donor::count(),
-            'total_donations' => Donation::count(),
-        ];
-        $cities = City::all();
-
-        return view('admin.dashboard', compact('centers'));
-    }
+    //     return redirect()->route('admin.centers.index')->with('success', 'Donation center approved successfully.');
+    // }
     
-    public function addCity(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-        ]);
+    // public function rejectCenter($id)
+    // {
+    //     $center = DonationCenter::findOrFail($id);
+    //     $center->status = 'rejected';
+    //     $center->save();
 
-        City::create([
-            'name' => $request->name,
-        ]);
+    //     return redirect()->route('admin.centers.index')->with('success', 'Donation center rejected successfully.');
+    // }
 
-        return redirect()->back()->with('success', 'City added successfully.');
-    }
+
     
-    public function deleteCity($id)
-    {
-        $city = City::findOrFail($id);
-        $city->delete();
+    // public function addCity(Request $request)
+    // {
+    //     $request->validate([
+    //         'name' => 'required|string|max:255',
+    //     ]);
 
-        return redirect()->back()->with('success', 'City deleted successfully.');
-    }
+    //     City::create([
+    //         'name' => $request->name,
+    //     ]);
+
+    //     return redirect()->back()->with('success', 'City added successfully.');
+    // }
+    
+    // public function deleteCity($id)
+    // {
+    //     $city = City::findOrFail($id);
+    //     $city->delete();
+
+    //     return redirect()->back()->with('success', 'City deleted successfully.');
+    // }
     
     public function approveDonationCenter($id)
     {
@@ -147,6 +104,7 @@ class AdminController extends Controller
             'total_reservations' => Reservation::count(),
             'total_donors' => Donor::count(),
             'total_donations' => Donation::count(),
+            'total_cities' => City::count(),
         ];
 
         return view('admin.dashboard', compact('stats', 'pendingCenters'));
@@ -216,6 +174,8 @@ class AdminController extends Controller
             ->get();
 
         $cities = City::orderBy('name')->get();
+        $cityCount = $cities->count();
+        // dd($cityCount);
         $stats = [
             'total_centers' => DonationCenter::count(),
             'pending_centers' => $pendingCenters->count(),

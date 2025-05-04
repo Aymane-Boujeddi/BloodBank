@@ -4,21 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'BloodBank')</title>
+    <meta name="description" content="Interface d'administration du système BloodBank">
+    <title>@yield('title', 'Administration') - BloodBank</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="{{ asset('css/center-layout.css') }}" rel="stylesheet" />
-    
-    @stack('head')
+
+    <link href="{{ asset('css/admin-layout.css') }}" rel="stylesheet" />
+
+
+    @stack('styles')
 </head>
 
-<body class="bg-gray-50 font-['Inter'] bg-[#f5f7fa]">
+<body class="bg-gray-50">
     <div class="flex h-screen">
         <aside id="sidebar"
-            class="fixed inset-y-0 left-0 z-40 w-64 bg-white overflow-y-auto custom-scrollbar transition-transform duration-300 ease-in-out shadow-[0_0_20px_rgba(0,0,0,0.05)]">
+            class="sidebar fixed inset-y-0 left-0 z-40 w-64 bg-white overflow-y-auto custom-scrollbar">
             <div class="p-5">
-                <a href="{{ route('donationCenter.dashboard') }}" class="flex items-center mb-8">
+                <a href="{{ route('donor.dashboard') }}" class="flex items-center mb-8">
                     <i class="fas fa-tint text-red-600 text-2xl mr-2"></i>
                     <span class="text-2xl font-semibold text-red-600">Blood</span>
                     <span class="text-2xl font-semibold text-gray-700">Bank</span>
@@ -36,26 +42,31 @@
                         </div>
                     </div>
                 </div>
+
                 <nav class="space-y-1">
-                    <a href="{{ route('donationCenter.dashboard') }}"
-                        class="sidebar-link flex items-center px-4 py-3 text-sm rounded-lg {{ request()->routeIs('donationCenter.dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('admin.dashboard') }}"
+                        class="sidebar-link flex items-center px-4 py-3 text-sm rounded-lg {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                         <i class="fas fa-tachometer-alt mr-3 w-5 text-center"></i> Tableau de bord
                     </a>
-                    <a href="{{ route('donationCenter.appointments') }}"
-                        class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700 rounded-lg {{ request()->routeIs('donationCenter.appointments') ? 'active' : '' }}">
-                        <i class="fas fa-calendar-alt mr-3 w-5 text-center"></i> Rendez-vous
+                    <a href="{{ route('admin.users') }}"
+                        class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700 rounded-lg {{ request()->routeIs('admin.users') ? 'active' : '' }}">
+                        <i class="fas fa-users mr-3 w-5 text-center"></i> Utilisateurs
                     </a>
-                    <a href="{{ route('donationCenter.centerResultsPage') }}"
-                        class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700 rounded-lg {{ request()->routeIs('donationCenter.centerResultsPage') ? 'active' : '' }}">
-                        <i class="fas fa-vials mr-3 w-5 text-center"></i> Résultats
+                    <a href="{{ route('admin.centers') }}"
+                        class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700 rounded-lg {{ request()->routeIs('admin.centers') ? 'active' : '' }}">
+                        <i class="fas fa-hospital mr-3 w-5 text-center"></i> Centres
                     </a>
-                    <a href="{{ route('donationCenter.profile') }}"
-                        class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700 rounded-lg {{ request()->routeIs('donationCenter.profile') ? 'active' : '' }}">
-                        <i class="fas fa-user mr-3 w-5 text-center"></i> Profil
+                    
+                    <a href="{{ route('admin.data') }}"
+                        class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700 rounded-lg {{ request()->routeIs('admin.data') ? 'active' : '' }}">
+                        <i class="fas fa-database mr-3 w-5 text-center"></i> Données de référence
                     </a>
-                  
 
                     <div class="my-5 border-t border-gray-200"></div>
+
+                    <p class="px-4 text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Administration</p>
+
+                 
 
                     <form method="POST" action="{{ route('logout') }}" class="block w-full text-left">
                         @csrf
@@ -65,14 +76,6 @@
                         </button>
                     </form>
                 </nav>
-
-                <div class="mt-10 bg-gray-50 p-4 rounded-lg">
-                    <h4 class="text-sm font-medium text-gray-800">Support technique</h4>
-                    <p class="text-xs text-gray-600 mt-1">Besoin d'aide avec votre centre ?</p>
-                    <a href="#" class="text-xs text-red-600 mt-2 inline-block hover:text-red-800">
-                        <i class="fas fa-question-circle mr-1"></i> Centre d'assistance
-                    </a>
-                </div>
             </div>
         </aside>
 
@@ -85,21 +88,22 @@
                         <div class="flex-1">
                             <h1 class="text-xl font-semibold text-gray-800">
                                 <span class="text-red-600">@yield('page-title', 'Dashboard')</span>
-                                <span class="text-sm text-gray-500 font-normal ml-2">Centre de Don</span>
+                                <span class="text-sm text-gray-500 font-big ml-2">Administrateur</span>
                             </h1>
                         </div>
                         <div class="flex items-center md:hidden">
                             <button id="mobile-menu-button"
                                 class="p-2 rounded-md text-gray-500 hover:text-red-600 hover:bg-gray-100 focus:outline-none">
-                                <i class="fas fa-bars text-xl"></i> 
+                                <i class="fas fa-bars text-xl"></i>
                             </button>
                         </div>
+
+                       
                     </div>
                 </div>
             </header>
 
-            <main
-                class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 transition-[margin-left] duration-300 ease-in-out md:ml-64">
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 main-content">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     @yield('content')
                 </div>

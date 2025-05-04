@@ -15,9 +15,27 @@ class profileCompletion
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!$request->user()->profile_completed) {
-            return redirect()->route('profile.')->with('message', 'Please complete your profile before proceeding.');
+        $user = $request->user();
+        
+        // Make sure we have a user
+        if (!$user) {
+            return redirect()->route('login');
         }
+        
+        // Determine role based on user type
+        $role = '';
+        if ($user->role == 'donor') {
+            $role = 'donor';
+        } else if ($user->role == 'donation_centre') {
+            $role = 'donationCenter';
+        } else if ($user->role == 'admin') {
+            $role = 'admin';
+        }
+        
+        if($user->profile_status == 'complete') {
+            return redirect()->route($role . '.dashboard')->with('message', 'Please complete your profile before proceeding.');
+        }
+        
         return $next($request);
     }
 }

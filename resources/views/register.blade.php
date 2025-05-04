@@ -15,7 +15,7 @@
         <div class="container mx-auto px-6 py-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <a href="{{ route('welcome') }}" class="text-red-600 text-2xl font-bold">BloodBank</a>
+                    <a href="{{ route('home') }}" class="text-red-600 text-2xl font-bold">BloodBank</a>
                 </div>
 
                 <div class="md:hidden">
@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="{{ route('welcome') }}" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
+                    <a href="{{ route('home') }}" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
                     <a href="{{ route('about') }}" class="text-gray-600 hover:text-red-600 transition">À propos</a>
                     <a href="{{ route('contact') }}" class="text-gray-600 hover:text-red-600 transition">Contact</a>
                     <div class="flex space-x-4">
@@ -42,7 +42,7 @@
 
                 <div class="hidden md:hidden absolute top-full left-0 right-0 bg-white shadow-md p-6" id="mobile-menu">
                     <div class="flex flex-col space-y-4">
-                        <a href="{{ route('welcome') }}" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
+                        <a href="{{ route('home') }}" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
                         <a href="{{ route('about') }}" class="text-gray-600 hover:text-red-600 transition">À propos</a>
                         <a href="{{ route('contact') }}" class="text-gray-600 hover:text-red-600 transition">Contact</a>
                         <a href="{{ route('login') }}" class="text-gray-600 hover:text-red-600 transition">Connexion</a>
@@ -157,15 +157,13 @@
                         </div>
 
                         <div>
-                            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Mot de
-                                passe</label>
+                            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Mot de passe</label>
                             <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-lock text-gray-400"></i>
-                                </div>
+                                <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                                 <input type="password" id="password" name="password"
-                                    class="w-full pl-10 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent @error('password') border-red-500 @enderror"
+                                    class="w-full pl-10 pr-10 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent @error('password') border-red-500 @enderror"
                                     placeholder="••••••••">
+                                <i class="fas fa-eye absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer toggle-password"></i>
                             </div>
                             @error('password')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -173,24 +171,14 @@
                         </div>
 
                         <div>
-                            <label for="password_confirmation"
-                                class="block text-sm font-medium text-gray-700 mb-2">Confirmer le mot de passe</label>
+                            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">Confirmer le mot de passe</label>
                             <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-lock text-gray-400"></i>
-                                </div>
+                                <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                                 <input type="password" id="password_confirmation" name="password_confirmation"
-                                    class="w-full pl-10 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
+                                    class="w-full pl-10 pr-10 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
                                     placeholder="••••••••">
+                                <i class="fas fa-eye absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer toggle-password"></i>
                             </div>
-                        </div>
-
-                        <div class="flex items-center">
-                            <input type="checkbox" id="terms" name="terms"
-                                class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
-                            <label class="ml-2 block text-sm text-gray-700">J'accepte les <a href="#"
-                                    class="text-red-600 hover:text-red-800 font-medium">conditions
-                                    d'utilisation</a></label>
                         </div>
 
                         <div class="bg-blue-50 text-blue-700 p-3 rounded-md text-sm">
@@ -232,9 +220,9 @@
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Légal</h4>
                     <ul class="space-y-2">
-                        <li><a href="{{ route('legal') }}" class="text-gray-400 hover:text-white">Mentions
+                        <li><a href="" class="text-gray-400 hover:text-white">Mentions
                                 légales</a></li>
-                        <li><a href="{{ route('privacy') }}"
+                        <li><a href=""
                                 class="text-gray-400 hover:text-white">Confidentialité</a></li>
                     </ul>
                 </div>
@@ -315,6 +303,16 @@
                 donorRadio.addEventListener('change', updateRadioStyles);
                 centerRadio.addEventListener('change', updateRadioStyles);
             }
+
+            document.querySelectorAll('.toggle-password').forEach(item => {
+                item.addEventListener('click', function (e) {
+                    const passwordInput = e.target.previousElementSibling;
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    e.target.classList.toggle('fa-eye');
+                    e.target.classList.toggle('fa-eye-slash');
+                });
+            });
         });
     </script>
 </body>
