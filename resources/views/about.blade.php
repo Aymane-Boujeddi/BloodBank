@@ -15,7 +15,7 @@
         <div class="container mx-auto px-6 py-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <a href="{{ route('welcome') }}" class="text-red-600 text-2xl font-bold">BloodBank</a>
+                    <a href="{{ route('home') }}" class="text-red-600 text-2xl font-bold">BloodBank</a>
                 </div>
 
                 <div class="md:hidden">
@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="{{ route('welcome') }}" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
+                    <a href="{{ route('home') }}" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
                     <a href="{{ route('about') }}" class="text-gray-600 hover:text-red-600 transition">À propos</a>
                     <a href="{{ route('contact') }}" class="text-gray-600 hover:text-red-600 transition">Contact</a>
                     <a href="{{ route('login') }}" class="bg-red-600 text-white px-6 py-2 rounded-full hover:bg-red-700 transition">
@@ -139,8 +139,8 @@
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Légal</h4>
                     <ul class="space-y-2">
-                        <li><a href="{{ route('legal') }}" class="text-gray-400 hover:text-white">Mentions légales</a></li>
-                        <li><a href="{{ route('privacy') }}" class="text-gray-400 hover:text-white">Confidentialité</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Mentions légales</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Confidentialité</a></li>
                     </ul>
                 </div>
                 <div>

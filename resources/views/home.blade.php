@@ -7,7 +7,6 @@
     <title>BloodBank - Donnez votre sang, sauvez des vies</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://unpkg.com/scrollreveal"></script>
     <style>
         .blood-wave {
             position: relative;
@@ -24,14 +23,6 @@
             background: rgb(239, 68, 68);
             border-radius: 50% 50% 0 0;
         }
-
-        .stats-item {
-            transition: transform 0.3s ease;
-        }
-
-        .stats-item:hover {
-            transform: translateY(-5px);
-        }
     </style>
 </head>
 
@@ -40,7 +31,7 @@
         <div class="container mx-auto px-6 py-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <a href="{{ route('welcome') }}" class="flex items-center">
+                    <a href="." class="flex items-center">
                         <i class="fas fa-tint text-red-600 text-2xl mr-2"></i>
                         <span class="text-red-600 text-2xl font-bold">BloodBank</span>
                     </a>
@@ -53,7 +44,7 @@
                 </div>
 
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="{{ route('welcome') }}"
+                    <a href="{{ route('home') }}" id="home-link"
                         class="text-gray-600 hover:text-red-600 transition font-medium">Accueil</a>
                     <a href="{{ route('about') }}" class="text-gray-600 hover:text-red-600 transition">À propos</a>
                     <a href="{{ route('contact') }}" class="text-gray-600 hover:text-red-600 transition">Contact</a>
@@ -73,7 +64,7 @@
 
         <div class="hidden md:hidden bg-white shadow-md" id="mobile-menu">
             <div class="container mx-auto px-6 py-4 flex flex-col space-y-4">
-                <a href="{{ route('welcome') }}" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
+                <a href="{{ route('home') }}" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
                 <a href="{{ route('about') }}" class="text-gray-600 hover:text-red-600 transition">À propos</a>
                 <a href="{{ route('contact') }}" class="text-gray-600 hover:text-red-600 transition">Contact</a>
                 <a href="{{ route('login') }}" class="text-gray-600 hover:text-red-600 transition">Connexion</a>
@@ -95,7 +86,7 @@
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4">
                         <a href="{{ route('register') }}?role=donor"
-                            class="bg-red-600 text-white px-8 py-3 rounded-full text-lg hover:bg-red-700 transition transform hover:scale-105 shadow-lg flex items-center justify-center">
+                            class="bg-red-600 text-white px-8 py-3 rounded-full text-lg hover:bg-red-700 transition shadow-lg flex items-center justify-center">
                             <i class="fas fa-heart mr-2"></i> Devenir donneur
                         </a>
                         <a href="#find-center"
@@ -124,7 +115,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition group">
-                    <div class="text-red-600 text-3xl mb-4 group-hover:scale-110 transition-transform">
+                    <div class="text-red-600 text-3xl mb-4 transition-transform">
                         <i class="fas fa-search"></i>
                     </div>
                     <h3 class="text-xl font-semibold mb-3">Recherche de centres</h3>
@@ -136,7 +127,7 @@
                 </div>
 
                 <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition group">
-                    <div class="text-red-600 text-3xl mb-4 group-hover:scale-110 transition-transform">
+                    <div class="text-red-600 text-3xl mb-4 transition-transform">
                         <i class="fas fa-calendar-alt"></i>
                     </div>
                     <h3 class="text-xl font-semibold mb-3">Rendez-vous en ligne</h3>
@@ -148,7 +139,7 @@
                 </div>
 
                 <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition group">
-                    <div class="text-red-600 text-3xl mb-4 group-hover:scale-110 transition-transform">
+                    <div class="text-red-600 text-3xl mb-4 transition-transform">
                         <i class="fas fa-chart-line"></i>
                     </div>
                     <h3 class="text-xl font-semibold mb-3">Suivi de vos dons</h3>
@@ -174,22 +165,22 @@
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <div class="text-center stats-item">
+                <div class="text-center">
                     <div class="text-4xl font-bold mb-2">12,580</div>
                     <div class="text-red-100">Donneurs actifs</div>
                 </div>
 
-                <div class="text-center stats-item">
+                <div class="text-center">
                     <div class="text-4xl font-bold mb-2">8,392</div>
                     <div class="text-red-100">Vies sauvées</div>
                 </div>
 
-                <div class="text-center stats-item">
+                <div class="text-center">
                     <div class="text-4xl font-bold mb-2">156</div>
                     <div class="text-red-100">Centres partenaires</div>
                 </div>
 
-                <div class="text-center stats-item">
+                <div class="text-center">
                     <div class="text-4xl font-bold mb-2">25,746</div>
                     <div class="text-red-100">Dons de sang</div>
                 </div>
@@ -413,6 +404,7 @@
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Liens utiles</h4>
                     <ul class="space-y-2">
+
                         <li><a href="{{ route('about') }}" class="text-gray-400 hover:text-white">À propos</a></li>
                         <li><a href="{{ route('contact') }}" class="text-gray-400 hover:text-white">Contact</a></li>
                     </ul>
@@ -420,10 +412,9 @@
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Légal</h4>
                     <ul class="space-y-2">
-                        <li><a href="{{ route('legal') }}" class="text-gray-400 hover:text-white">Mentions
+                        <li><a href="." class="text-gray-400 hover:text-white">Mentions
                                 légales</a></li>
-                        <li><a href="{{ route('privacy') }}"
-                                class="text-gray-400 hover:text-white">Confidentialité</a></li>
+                        <li><a href="" class="text-gray-400 hover:text-white">Confidentialité</a></li>
                     </ul>
                 </div>
                 <div>
@@ -448,14 +439,6 @@
                     mobileMenu.classList.toggle('hidden');
                 });
             }
-
-            ScrollReveal().reveal('.container', {
-                delay: 200,
-                distance: '20px',
-                origin: 'bottom',
-                duration: 1000,
-                easing: 'ease-in-out'
-            });
         });
     </script>
 </body>

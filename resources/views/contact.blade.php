@@ -11,7 +11,7 @@
 </head>
 
 <body class="font-sans">
-    <!-- Barre de Navigation -->
+    
     <nav class="fixed w-full bg-white shadow-md z-50">
         <div class="container mx-auto px-6 py-3">
             <div class="flex items-center justify-between">
@@ -19,18 +19,18 @@
                     <a href="/" class="text-red-600 text-2xl font-bold">BloodBank</a>
                 </div>
 
-                <!-- Menu Mobile -->
+               
                 <div class="md:hidden">
                     <button id="mobile-menu-button" class="text-gray-500 hover:text-gray-600">
                         <i class="fas fa-bars text-2xl"></i>
                     </button>
                 </div>
 
-                <!-- Menu Desktop -->
+                
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="home.html" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
-                    <a href="about.html" class="text-gray-600 hover:text-red-600 transition">À propos</a>
-                    <a href="contact.html" class="text-gray-600 hover:text-red-600 transition">Contact</a>
+                    <a href="{{route('home')}}" class="text-gray-600 hover:text-red-600 transition">Accueil</a>
+                    <a href="{{route('about')}}" class="text-gray-600 hover:text-red-600 transition">À propos</a>
+                    <a href="{{route('contact')}}" class="text-gray-600 hover:text-red-600 transition">Contact</a>
                     <button class="bg-red-600 text-white px-6 py-2 rounded-full hover:bg-red-700 transition">
                         Connexion
                     </button>
@@ -39,7 +39,7 @@
         </div>
     </nav>
 
-    <!-- Section Contact -->
+   
     <section id="contact" class="pt-24 bg-white">
         <div class="container mx-auto px-6">
             <div class="max-w-4xl mx-auto">
@@ -81,11 +81,11 @@
         </div>
     </section>
 
-    <!-- Informations de Contact -->
+   
     <section class="py-16 bg-gray-50">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Adresse -->
+                
                 <div class="text-center p-6">
                     <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-map-marker-alt text-red-600 text-2xl"></i>
@@ -94,7 +94,7 @@
                     <p class="text-gray-600">123 Rue du Don<br>75000 Paris, France</p>
                 </div>
 
-                <!-- Téléphone -->
+                
                 <div class="text-center p-6">
                     <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-phone text-red-600 text-2xl"></i>
@@ -103,7 +103,7 @@
                     <p class="text-gray-600">+33 1 23 45 67 89</p>
                 </div>
 
-                <!-- Email -->
+                <
                 <div class="text-center p-6">
                     <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-envelope text-red-600 text-2xl"></i>
@@ -115,11 +115,9 @@
         </div>
     </section>
 
-    <!-- Map Section -->
     <section class="py-16">
         <div class="container mx-auto px-6">
             <div class="h-96 bg-gray-300 rounded-xl">
-                <!-- Add Google Maps or other map integration here -->
                 <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.9916256937595!2d2.292292615509614!3d48.85837007928757!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e2964e34e2d%3A0x8ddca9ee380ef7e0!2sTour%20Eiffel!5e0!3m2!1sfr!2sfr!4v1647874587931!5m2!1sfr!2sfr"
                     width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" class="rounded-xl">
@@ -128,7 +126,6 @@
         </div>
     </section>
 
-    <!-- Pied de Page -->
     <footer class="bg-gray-800 text-white py-12">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -139,8 +136,8 @@
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Liens utiles</h4>
                     <ul class="space-y-2">
-                        <li><a href="about.html" class="text-gray-400 hover:text-white">À propos</a></li>
-                        <li><a href="contact.html" class="text-gray-400 hover:text-white">Contact</a></li>
+                        <li><a href="{{route('about')}}" class="text-gray-400 hover:text-white">À propos</a></li>
+                        <li><a href="{{route('contact')}}" class="text-gray-400 hover:text-white">Contact</a></li>
                     </ul>
                 </div>
                 <div>
