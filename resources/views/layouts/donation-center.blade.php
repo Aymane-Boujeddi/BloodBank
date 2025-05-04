@@ -4,117 +4,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'DonSang')</title>
+    <title>@yield('title', 'BloodBank')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f5f7fa;
-        }
-
-        .sidebar {
-            transition: transform 0.3s ease-in-out;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
-        }
-
-        .sidebar-link {
-            transition: all 0.2s ease;
-            border-left: 4px solid transparent;
-            margin-bottom: 2px;
-        }
-
-        .sidebar-link.active {
-            background-color: rgba(239, 68, 68, 0.1);
-            border-left-color: #ef4444;
-            color: #dc2626;
-            font-weight: 500;
-        }
-
-        .sidebar-link:hover:not(.active) {
-            background-color: rgba(239, 68, 68, 0.05);
-            color: #374151;
-        }
-
-        .main-content {
-            transition: margin-left 0.3s ease-in-out;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0 !important;
-            }
-
-            .overlay {
-                display: none;
-            }
-
-            .overlay.open {
-                display: block;
-            }
-        }
-
-        @media (min-width: 769px) {
-            .sidebar {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 16rem;
-            }
-
-            #mobile-menu-button {
-                display: none;
-            }
-
-            .overlay {
-                display: none !important;
-            }
-        }
-
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 5px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #ddd;
-            border-radius: 5px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #ccc;
-        }
-    </style>
+    <link href="{{ asset('css/center-layout.css') }}" rel="stylesheet" />
+    
     @stack('head')
 </head>
 
-<body class="bg-gray-50">
+<body class="bg-gray-50 font-['Inter'] bg-[#f5f7fa]">
     <div class="flex h-screen">
-        <!-- Sidebar -->
         <aside id="sidebar"
-            class="sidebar fixed inset-y-0 left-0 z-40 w-64 bg-white overflow-y-auto custom-scrollbar">
+            class="fixed inset-y-0 left-0 z-40 w-64 bg-white overflow-y-auto custom-scrollbar transition-transform duration-300 ease-in-out shadow-[0_0_20px_rgba(0,0,0,0.05)]">
             <div class="p-5">
-                <!-- Branding in Sidebar -->
                 <a href="{{ route('donationCenter.dashboard') }}" class="flex items-center mb-8">
                     <i class="fas fa-tint text-red-600 text-2xl mr-2"></i>
-                    <span class="text-2xl font-semibold text-red-600">Don</span>
-                    <span class="text-2xl font-semibold text-gray-700">Sang</span>
+                    <span class="text-2xl font-semibold text-red-600">Blood</span>
+                    <span class="text-2xl font-semibold text-gray-700">Bank</span>
                 </a>
 
-                <!-- Navigation Links -->
+                <div class="mb-6 pb-6 border-b border-gray-200">
+                    <div class="flex items-center">
+                        <div
+                            class="h-12 w-12 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center text-white text-lg font-semibold shadow-sm mr-3">
+                            {{ substr(auth()->user()->name ?? 'A', 0, 1) }}
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-900">{{ auth()->user()->name ?? 'Donneur' }}</p>
+                            <p class="text-xs text-gray-600">{{ auth()->user()->email ?? '' }}</p>
+                        </div>
+                    </div>
+                </div>
                 <nav class="space-y-1">
                     <a href="{{ route('donationCenter.dashboard') }}"
                         class="sidebar-link flex items-center px-4 py-3 text-sm rounded-lg {{ request()->routeIs('donationCenter.dashboard') ? 'active' : '' }}">
@@ -124,20 +45,16 @@
                         class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700 rounded-lg {{ request()->routeIs('donationCenter.appointments') ? 'active' : '' }}">
                         <i class="fas fa-calendar-alt mr-3 w-5 text-center"></i> Rendez-vous
                     </a>
-                    <a href="{{ route('donationCenter.results') }}"
-                        class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700 rounded-lg {{ request()->routeIs('donationCenter.results') ? 'active' : '' }}">
+                    <a href="{{ route('donationCenter.centerResultsPage') }}"
+                        class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700 rounded-lg {{ request()->routeIs('donationCenter.centerResultsPage') ? 'active' : '' }}">
                         <i class="fas fa-vials mr-3 w-5 text-center"></i> Résultats
                     </a>
                     <a href="{{ route('donationCenter.profile') }}"
                         class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700 rounded-lg {{ request()->routeIs('donationCenter.profile') ? 'active' : '' }}">
                         <i class="fas fa-user mr-3 w-5 text-center"></i> Profil
                     </a>
-                    <a href="{{ route('donationCenter.settings') }}"
-                        class="sidebar-link flex items-center px-4 py-3 text-sm text-gray-700 rounded-lg {{ request()->routeIs('donationCenter.settings') ? 'active' : '' }}">
-                        <i class="fas fa-cog mr-3 w-5 text-center"></i> Paramètres
-                    </a>
+                  
 
-                    <!-- Separator -->
                     <div class="my-5 border-t border-gray-200"></div>
 
                     <form method="POST" action="{{ route('logout') }}" class="block w-full text-left">
@@ -149,7 +66,6 @@
                     </form>
                 </nav>
 
-                <!-- Help Section -->
                 <div class="mt-10 bg-gray-50 p-4 rounded-lg">
                     <h4 class="text-sm font-medium text-gray-800">Support technique</h4>
                     <p class="text-xs text-gray-600 mt-1">Besoin d'aide avec votre centre ?</p>
@@ -160,30 +76,30 @@
             </div>
         </aside>
 
-        <!-- Overlay for mobile -->
         <div id="overlay" class="overlay fixed inset-0 bg-black opacity-50 z-30 hidden"></div>
 
-        <!-- Main Content Area -->
         <div class="flex-1 flex flex-col overflow-hidden">
-            <!-- Top Bar -->
             <header class="bg-white shadow-sm relative z-10">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between items-center h-16">
-                        <!-- Mobile Menu Toggle -->
+                        <div class="flex-1">
+                            <h1 class="text-xl font-semibold text-gray-800">
+                                <span class="text-red-600">@yield('page-title', 'Dashboard')</span>
+                                <span class="text-sm text-gray-500 font-normal ml-2">Centre de Don</span>
+                            </h1>
+                        </div>
                         <div class="flex items-center md:hidden">
                             <button id="mobile-menu-button"
                                 class="p-2 rounded-md text-gray-500 hover:text-red-600 hover:bg-gray-100 focus:outline-none">
-                                <i class="fas fa-bars text-xl"></i>
+                                <i class="fas fa-bars text-xl"></i> 
                             </button>
                         </div>
-
-                   
                     </div>
                 </div>
             </header>
 
-            <!-- Main Content -->
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 main-content">
+            <main
+                class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 transition-[margin-left] duration-300 ease-in-out md:ml-64">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     @yield('content')
                 </div>
@@ -202,13 +118,11 @@
             const overlay = document.getElementById('overlay');
             const mainContent = document.querySelector('.main-content');
 
-            // Toggle sidebar function
             const toggleSidebar = () => {
                 sidebar.classList.toggle('open');
                 overlay.classList.toggle('open');
             };
 
-            // Toggle sidebar on mobile button click
             if (mobileMenuButton && sidebar && overlay) {
                 mobileMenuButton.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -216,7 +130,6 @@
                 });
             }
 
-            // Toggle profile dropdown
             if (profileMenuButton && profileDropdown) {
                 profileMenuButton.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -224,24 +137,20 @@
                 });
             }
 
-            // Close dropdowns/sidebar when clicking outside
             document.addEventListener('click', function(e) {
-                // Close profile dropdown
                 if (profileMenuButton && profileDropdown && !profileDropdown.classList.contains('hidden') &&
                     !profileMenuButton.contains(e.target) &&
                     !profileDropdown.contains(e.target)) {
                     profileDropdown.classList.add('hidden');
                 }
 
-                // Close sidebar on overlay click (mobile only)
                 if (overlay && overlay.classList.contains('open') && e.target === overlay) {
                     toggleSidebar();
                 }
             });
 
-            // Handle window resize to properly show/hide sidebar on screen size change
             window.addEventListener('resize', function() {
-                if (window.innerWidth >= 768) { // md breakpoint
+                if (window.innerWidth >= 768) {
                     sidebar.classList.remove('-translate-x-full');
                     sidebar.classList.remove('open');
                     overlay.classList.remove('open');
