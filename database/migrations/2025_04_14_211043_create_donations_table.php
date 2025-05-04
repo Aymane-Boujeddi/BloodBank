@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('donations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('donor_id')->constrained()->onDelete('cascade');
-            $table->foreignId('donation_center_id')->constrained()->onDelete('cascade');
+            $table->foreignId('donor_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('donation_center_id')->nullable()->constrained()->onDelete('set null');
             $table->dateTime('donation_date');
             $table->timestamps();
         });
